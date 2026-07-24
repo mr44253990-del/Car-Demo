@@ -1,38 +1,73 @@
-# Car-Demo
+# Car-Demo (Premium Upgraded Edition)
 
-A simple Godot 4 demo focused on building and driving modular car setups.
+একটি সম্পূর্ণ এবং প্রফেশনাল লেভেলের গডোট (Godot 4.4) কার গেম প্রজেক্ট যা অ্যান্ড্রয়েড ও মোবাইল ডিভাইসের জন্য বিশেষভাবে অপ্টিমাইজড। এতে রয়েছে চমৎকার ড্রিফ্টিং ফিজিক্স, অফলাইন মাল্টিপ্লেয়ার, ফুয়েল এবং রিয়েল-টাইম ড্যামেজ সিস্টেম।
 
 ![Car demo screenshot](cars/Screenshot.png)
 
-![Doge icon](cars/doge-icon.png)
+## 🌟 নতুন ও আপগ্রেডেড ফিচারসমূহ (Upgraded Features)
 
-## Overview
+১. **রিয়েল অ্যানিমেটেড লোডিং স্ক্রিন (Real Animated Loading Screen)**:
+   - গেমটি ওপেন করার সাথে সাথেই একটি আকর্ষণীয় এবং ডায়নামিক লোডিং স্ক্রিন দেখা যাবে।
+   - এটি অ্যাসিনক্রোনাস থ্রেডেড রিসোর্স লোডিং (`ResourceLoader.load_threaded_request`) ব্যবহার করে রিয়েল-টাইমে গেমের ফাইল লোড করে।
+   - স্ক্রিনের নিচে গেমের প্রয়োজনীয় টিপস/পরামর্শ এবং একটি ঘূর্ণায়মান হুইল অ্যানিমেশন রয়েছে।
 
-Car-Demo is a lightweight learning project for vehicle gameplay in Godot. It includes a reusable base car setup, a follow camera, and scene examples that make it easier to prototype your own vehicle variations.
+২. **প্রিমিয়াম হোম স্ক্রিন ও মেনু (Stylish Main Menu)**:
+   - মোবাইল ফ্রেন্ডলি আধুনিক ডার্ক থিমযুক্ত ইউজার ইন্টারফেস (UI)।
+   - প্লে মোড (মিশন সিলেকশন), গ্যারেজ (গাড়ি মেরামত), মাল্টিপ্লেয়ার এবং গ্রাফিক্স ও সাউন্ড সেটিংস রয়েছে।
 
-## Features
+৩. **মিশন সিস্টেম (Game Missions)**:
+   - **মিশন ১: ফ্রি রোম (Free Roam)**: কোনো সময় বা ফুয়েলের চাপ নেই, ম্যাপে ড্রিফ্ট করুন এবং ঘুরে বেড়ান।
+   - **মিশন ২: কয়েন হান্টার (Coin Rush)**: নির্দিষ্ট সময়ে ম্যাপে ছড়ানো কয়েনগুলো সংগ্রহ করুন।
+   - **মিশন ৩: ফুয়েল সারভাইভার (Fuel Survivor)**: ফুয়েল দ্রুত ড্রেন হবে, বেঁচে থাকার জন্য দ্রুত ড্রাইভ করে ফুয়েল স্টেশনে পৌঁছান।
 
-- Playable base car controller
-- Dynamic follow camera system
-- GLTF-based car and wheel model workflow
-- Inheritance-friendly scene structure for rapid variants
-- Extra environment elements (spinning and bobbing platforms) for testing
+৪. **কয়েন ও ফুয়েল স্টেশন (Coins & Fuel Station)**:
+   - ম্যাপের বিভিন্ন জায়গায় ঘূর্ণায়মান সোনালী কয়েন ছড়ানো আছে যা দিয়ে ফুয়েল ও ড্যামেজ মেরামত করা যায়।
+   - ম্যাপে ৩ডি ফুয়েল স্টেশন রয়েছে যেখানে গাড়ি থামিয়ে কয়েনের বিনিময়ে ফুয়েল রি-চার্জ করা যায়।
 
-## Project Structure
+৫. **রিয়েল-টাইম ড্যামেজ ও স্মোক ফিজিক্স (Real-time Damage & Smoke Physics)**:
+   - গাড়ি দেয়ালে বা কোনো শক্ত বস্তুর সাথে ধাক্কা খেলে ইমপ্যাক্ট ভেলোসিটির উপর ভিত্তি করে রিয়েল ড্যামেজ ক্যালকুলেট হয়।
+   - ড্যামেজ ৫০% এর বেশি হলে গাড়ি থেকে ধূসর ধোঁয়া এবং ৭০% এর বেশি হলে কালো ধোঁয়া (CPUParticles3D) বের হবে।
+   - ড্যামেজ বেশি থাকলে গাড়ির এক্সিলারেশন পাওয়ার কমে যাবে।
 
-- `cars/` contains car scenes, models, and camera logic
-- `Scripts/` contains reusable gameplay scripts (reset, spinning, bobbing)
-- `Scenes/` contains test and environment scenes
+৬. **গ্যারেজ সিস্টেম (Garage Repair)**:
+   - মেনু থেকে বা লেভেলের ভেতর থেকে অর্জিত কয়েন খরচ করে গাড়ি সম্পূর্ণ ঠিক বা রিপেয়ার (Repair) করা যাবে।
 
-## Getting Started
+৭. **মোবাইল কন্ট্রোল HUD ও ক্যামেরা চেঞ্জার (Mobile Touch Controls & Cam Toggle)**:
+   - স্ক্রিনে টাচ কন্ট্রোলস (Gas, Reverse, Steering, Drift, Gear)।
+   - রিয়েল-টাইম FPS কাউন্টার, ফুয়েল বার এবং ড্যামেজ প্রগ্রেস বার।
+   - ক্যামেরা বাটন টিপে একাধিক মোড (Normal, Hood, Top-down, Close-up) পরিবর্তন করা সম্ভব।
+   - পজ মেনু থেকে রিয়েল-টাইম সাউন্ড ও মিউজিক কমানো বাড়ানো যাবে।
 
-1. Open the project in Godot 4.
-2. Load `main.tscn` and run the project.
-3. Duplicate or inherit from `cars/BaseCar.tscn` to create your own car variants.
+৮. **অফলাইন মাল্টিপ্লেয়ার (Offline Multiplayer - No Internet Required)**:
+   - WiFi বা Hotspot ব্যবহার করে কোনো ইন্টারনেট ছাড়াই বন্ধুরা একসাথে একই রুমে খেলতে পারবেন।
+   - হোস্ট (Host) রুম ক্রিয়েট করতে পারবে এবং ক্লায়েন্টরা আইপি অ্যাড্রেস বা আইডি দিয়ে রুমে জয়েন করে রিয়েল-টাইমে একে অপরের গাড়ি ও মুভমেন্ট দেখতে পাবে।
 
-## Credits
+---
 
-- **Project Creator:** Manik Sharma
-- **Contributors:**
-  - ShadowDara
-  - Weasel On A Stick
+## 📱 অ্যান্ড্রয়েড পারমিশন গাইড (Required Android Permissions)
+
+গেমটি অ্যান্ড্রয়েড বা মোবাইলে বিল্ড ও রান করার জন্য নিচের পারমিশনগুলো প্রয়োজন (যা Godot এর Export settings এ অন করতে হবে):
+* `INTERNET` - লোকাল নেটওয়ার্কে মাল্টিপ্লেয়ার খেলার জন্য।
+* `ACCESS_WIFI_STATE` - ওয়াইফাই কানেকশন ডিটেক্ট করার জন্য।
+* `CHANGE_WIFI_STATE` - হটস্পট বা লোকাল নেটওয়ার্ক সকেট তৈরি করার জন্য।
+
+---
+
+## 📂 ফাইল স্ট্রাকচার (Project Structure)
+
+- `res://Scripts/GameManager.gd` (Autoload) - গেমের মূল ডেটা, কয়েন, ফুয়েল, ড্যামেজ ও সেটিংস ম্যানেজার।
+- `res://Scenes/LoadingScreen.tscn` - প্রফেশনাল অ্যাসিনক্রোনাস লোডিং স্ক্রিন।
+- `res://Scenes/MainMenu.tscn` - সেটিংস, মিশন, গ্যারেজ এবং মাল্টিপ্লেয়ার অপশন সমৃদ্ধ হোম স্ক্রিন।
+- `res://Scenes/MobileHUD.tscn` - অন-স্ক্রিন মোবাইল টাচ বাটন এবং রিয়েল-টাইম গেম ড্যাশবোর্ড।
+- `res://Scenes/Coin.tscn` & `res://Scenes/FuelStation.tscn` - ইন্টারেক্টিভ এলিমেন্টস।
+- `res://main.tscn` - মূল ৩ডি রেসিং ম্যাপ যা আপগ্রেড করা হয়েছে।
+
+---
+
+## 🛠️ গেমটি রান করার নিয়ম (Getting Started)
+
+১. Godot Engine 4.x এ প্রজেক্টটি ওপেন করুন।
+২. গেমের স্টার্টআপ সিন হিসেবে `res://Scenes/MainMenu.tscn` সেট করা হয়েছে।
+৩. সরাসরি গেম রান করলে লোডিং স্ক্রিন হয়ে মেইন মেনু ওপেন হবে।
+
+*Developed & Upgraded with ❤️*

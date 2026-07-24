@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="CarDemo"
-run/main_scene="res://main.tscn"
+run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://project_icon.png"
+
+[autoload]
+
+GameManager="*res://Scripts/GameManager.gd"
 
 [display]
 

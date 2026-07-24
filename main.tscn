@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://yexejxsnlqvn"]
+[gd_scene load_steps=26 format=3 uid="uid://yexejxsnlqvn"]
 
 [ext_resource type="Script" uid="uid://bgjy77w1skls3" path="res://cars/BaseCar.gd" id="1_6tmgj"]
 [ext_resource type="PackedScene" uid="uid://benmjny2guowm" path="res://cars/Models/Doge/Wheel.glb" id="2_hwo3e"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bfvnfriyibjfl" path="res://Scenes/SpinningDisc.tscn" id="6_h0i2b"]
 [ext_resource type="PackedScene" uid="uid://bfyl7pbvll6tm" path="res://Scenes/bobbing_platform.tscn" id="7_6bw4t"]
 [ext_resource type="Script" uid="uid://bqkejwwuyp85m" path="res://Scripts/CarReset.gd" id="8_ayi6b"]
+[ext_resource type="Script" uid="uid://bqkejwwuyp86m" path="res://Scripts/GameLevel.gd" id="9_level"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_yc8e5"]
 font_size = 32
@@ -70,6 +71,7 @@ plane = Plane(0, 0, -1, 0)
 plane = Plane(0, 0, 1, 0)
 
 [node name="Main" type="Node3D"]
+script = ExtResource("9_level")
 
 [node name="CarResetter" type="Node" parent="."]
 unique_name_in_owner = true

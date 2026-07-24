@@ -1,0 +1,396 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7v7g2px3r7lm"]
+
+[ext_resource type="Script" uid="uid://c6fymtwsc10un" path="res://Scripts/MobileHUD.gd" id="1_mobilehud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud"]
+bg_color = Color(0, 0, 0, 0.4)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fuel"]
+bg_color = Color(0.1, 0.8, 0.2, 0.7)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_dmg"]
+bg_color = Color(0.9, 0.2, 0.2, 0.7)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="MobileHUD" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_mobilehud")
+
+[node name="MainContainer" type="Control" parent="."]
+process_mode = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopLeft" type="VBoxContainer" parent="MainContainer"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 250.0
+offset_bottom = 120.0
+theme_override_constants/separation = 5
+
+[node name="FpsLabel" type="Label" parent="MainContainer/TopLeft"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "FPS: 60"
+
+[node name="CoinsLabel" type="Label" parent="MainContainer/TopLeft"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 24
+text = "🪙 কয়েন: ০"
+
+[node name="TopRight" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -480.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 85.0
+grow_horizontal = 0
+theme_override_constants/separation = 15
+alignment = 2
+
+[node name="ResetBtn" type="Button" parent="MainContainer/TopRight"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "রিসেট 🔄"
+
+[node name="CameraBtn" type="Button" parent="MainContainer/TopRight"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "ক্যামেরা 🎥"
+
+[node name="PauseBtn" type="Button" parent="MainContainer/TopRight"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "পজ ⏸️"
+
+[node name="StatsContainer" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 20.0
+offset_right = 300.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_constants/separation = 20
+
+[node name="FuelBar" type="ProgressBar" parent="MainContainer/StatsContainer"]
+custom_minimum_size = Vector2(280, 30)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fuel")
+value = 100.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MainContainer/StatsContainer/FuelBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "ফুয়েল: ১০০%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DamageBar" type="ProgressBar" parent="MainContainer/StatsContainer"]
+custom_minimum_size = Vector2(280, 30)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_progress_dmg")
+value = 0.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MainContainer/StatsContainer/DamageBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "ড্যামেজ: ০%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MissionStatusLabel" type="Label" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 75.0
+offset_right = 400.0
+offset_bottom = 115.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "মিশন বিবরণ লোড হচ্ছে..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -140.0
+offset_right = 150.0
+offset_bottom = -75.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 46
+text = "0 KMPH"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GearLabel" type="Label" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -75.0
+offset_right = 100.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 22
+text = "Gear: N"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SteeringControls" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -220.0
+offset_right = 320.0
+offset_bottom = -40.0
+grow_vertical = 0
+theme_override_constants/separation = 20
+
+[node name="LeftBtn" type="Button" parent="MainContainer/SteeringControls"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 48
+text = "◀️"
+
+[node name="RightBtn" type="Button" parent="MainContainer/SteeringControls"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 48
+text = "▶️"
+
+[node name="ActionControls" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -550.0
+offset_top = -220.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 20
+alignment = 2
+
+[node name="GearBtn" type="Button" parent="MainContainer/ActionControls"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 22
+text = "GEAR
+⚙️"
+
+[node name="DriftBtn" type="Button" parent="MainContainer/ActionControls"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 24
+text = "DRIFT
+⭕"
+
+[node name="BrakeBtn" type="Button" parent="MainContainer/ActionControls"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 24
+text = "REVERSE
+▼"
+
+[node name="GasBtn" type="Button" parent="MainContainer/ActionControls"]
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 32
+text = "GAS
+▲"
+
+[node name="PauseMenu" type="Panel" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -300.0
+offset_right = 250.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="Title" type="Label" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 20.0
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 32
+text = "গেম পজ করা হয়েছে"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResumeBtn" type="Button" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 50.0
+offset_top = -140.0
+offset_right = -50.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "খেলা চালিয়ে যান ▶️"
+
+[node name="HomeBtn" type="Button" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 50.0
+offset_top = -60.0
+offset_right = -50.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "হোম স্ক্রিনে যান 🏠"
+
+[node name="VolumeContainer" type="VBoxContainer" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -260.0
+offset_right = -50.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="AudioLabel" type="Label" parent="PauseMenu/VolumeContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "সাউন্ড কন্ট্রোল"
+
+[node name="MasterLabel" type="Label" parent="PauseMenu/VolumeContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "মাস্টার ভলিউম:"
+
+[node name="MasterSlider" type="HSlider" parent="PauseMenu/VolumeContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MusicLabel" type="Label" parent="PauseMenu/VolumeContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "মিউজিক ভলিউম:"
+
+[node name="MusicSlider" type="HSlider" parent="PauseMenu/VolumeContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="SfxLabel" type="Label" parent="PauseMenu/VolumeContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "সাউন্ড এফেক্টস (SFX):"
+
+[node name="SfxSlider" type="HSlider" parent="PauseMenu/VolumeContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[connection signal="pressed" from="MainContainer/TopRight/ResetBtn" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="MainContainer/TopRight/CameraBtn" to="." method="_on_camera_pressed"]
+[connection signal="pressed" from="MainContainer/TopRight/PauseBtn" to="." method="_on_pause_pressed"]
+[connection signal="button_down" from="MainContainer/SteeringControls/LeftBtn" to="." method="_on_left_pressed"]
+[connection signal="button_up" from="MainContainer/SteeringControls/LeftBtn" to="." method="_on_left_released"]
+[connection signal="button_down" from="MainContainer/SteeringControls/RightBtn" to="." method="_on_right_pressed"]
+[connection signal="button_up" from="MainContainer/SteeringControls/RightBtn" to="." method="_on_right_released"]
+[connection signal="pressed" from="MainContainer/ActionControls/GearBtn" to="." method="_on_gear_pressed"]
+[connection signal="button_down" from="MainContainer/ActionControls/DriftBtn" to="." method="_on_drift_pressed"]
+[connection signal="button_up" from="MainContainer/ActionControls/DriftBtn" to="." method="_on_drift_released"]
+[connection signal="button_down" from="MainContainer/ActionControls/BrakeBtn" to="." method="_on_backward_pressed"]
+[connection signal="button_up" from="MainContainer/ActionControls/BrakeBtn" to="." method="_on_backward_released"]
+[connection signal="button_down" from="MainContainer/ActionControls/GasBtn" to="." method="_on_forward_pressed"]
+[connection signal="button_up" from="MainContainer/ActionControls/GasBtn" to="." method="_on_forward_released"]
+[connection signal="pressed" from="PauseMenu/ResumeBtn" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMenu/HomeBtn" to="." method="_on_home_pressed"]
+[connection signal="value_changed" from="PauseMenu/VolumeContainer/MasterSlider" to="." method="_on_volume_changed" binds= ["Master"]]
+[connection signal="value_changed" from="PauseMenu/VolumeContainer/MusicSlider" to="." method="_on_volume_changed" binds= ["Music"]]
+[connection signal="value_changed" from="PauseMenu/VolumeContainer/SfxSlider" to="." method="_on_volume_changed" binds= ["SFX"]]

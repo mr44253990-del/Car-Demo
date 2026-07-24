@@ -1,0 +1,618 @@
+[gd_scene load_steps=5 format=3 uid="uid://cb3u27qy6ox1e"]
+
+[ext_resource type="Script" uid="uid://cfglmx3bwyunh" path="res://Scripts/MainMenu.gd" id="1_mainmenu"]
+
+[sub_resource type="Gradient" id="Gradient_menu"]
+colors = PackedColorArray(0.08, 0.08, 0.15, 1, 0.15, 0.15, 0.3, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_menu"]
+gradient = SubResource("Gradient_menu")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.121569, 0.121569, 0.2, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.25, 0.45, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mainmenu")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_menu")
+expand_mode = 1
+
+[node name="TopBar" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="TopBar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 30.0
+offset_top = -25.0
+offset_right = 530.0
+offset_top = 25.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "🚗 CAR DEMO: ULTIMATE"
+vertical_alignment = 1
+
+[node name="CoinsLabel" type="Label" parent="TopBar"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -25.0
+offset_right = -30.0
+offset_top = 25.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 32
+text = "🪙 কয়েন: ০"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MainLayout" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 120.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Sidebar" type="Panel" parent="MainLayout"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="MainLayout/Sidebar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 20.0
+offset_right = -15.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="PlayTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "মিশন খেলুন 🎮"
+
+[node name="GarageTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "গ্যারেজ 🛠️"
+
+[node name="MultiplayerTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "মাল্টিপ্লেয়ার 🌐"
+
+[node name="SettingsTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "সেটিংস ⚙️"
+
+[node name="Spacer" type="Control" parent="MainLayout/Sidebar/ButtonsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ExitBtn" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_font_sizes/font_size = 28
+text = "বাহির হন ❌"
+
+[node name="ContentArea" type="Control" parent="MainLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayPanel" type="Panel" parent="MainLayout/ContentArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/PlayPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 20.0
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "মিশন নির্বাচন করুন"
+horizontal_alignment = 1
+
+[node name="MissionGrid" type="HBoxContainer" parent="MainLayout/ContentArea/PlayPanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 30.0
+offset_top = -140.0
+offset_right = -30.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Mission1" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "মিশন ১: ফ্রি রোম"
+
+[node name="Mission2" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "মিশন ২: কয়েন হান্টার"
+
+[node name="Mission3" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "মিশন ৩: ফুয়েল সারভাইভার"
+
+[node name="MissionDescLabel" type="Label" parent="MainLayout/ContentArea/PlayPanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 50.0
+offset_top = -10.0
+offset_right = -50.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "মিশনের বিবরণ এখানে দেখানো হবে।"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="StartGameButton" type="Button" parent="MainLayout/ContentArea/PlayPanel"]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 32
+text = "গেম শুরু করুন 🏁"
+
+[node name="GaragePanel" type="Panel" parent="MainLayout/ContentArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 20.0
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.6, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "গ্যারেজ (গাড়ি মেরামত)"
+horizontal_alignment = 1
+
+[node name="CarStatusLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -150.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 28
+text = "গাড়ির কন্ডিশন: চমৎকার!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DamageLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -80.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_font_sizes/font_size = 28
+text = "গাড়ির ড্যামেজ: ০%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RepairCostLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -10.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "মেরামত খরচ: ০ কয়েন"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RepairButton" type="Button" parent="MainLayout/ContentArea/GaragePanel"]
+custom_minimum_size = Vector2(350, 80)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -175.0
+offset_top = -140.0
+offset_right = 175.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "গাড়ি মেরামত করুন 🛠️"
+
+[node name="MultiplayerPanel" type="Panel" parent="MainLayout/ContentArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 20.0
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 0.4, 1)
+theme_override_font_sizes/font_size = 32
+text = "অফলাইন মাল্টিপ্লেয়ার (ওয়াইফাই / হটস্পট)"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="MainLayout/ContentArea/MultiplayerPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -160.0
+offset_right = 300.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/horizontal_separation = 20
+theme_override_constants/vertical_separation = 15
+columns = 2
+
+[node name="IpLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "আইপি অ্যাড্রেস (হোস্ট):"
+
+[node name="IpInput" type="LineEdit" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
+custom_minimum_size = Vector2(300, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "192.168.43.1"
+placeholder_text = "e.g. 192.168.43.1"
+
+[node name="PortLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "সার্ভার পোর্ট:"
+
+[node name="PortInput" type="LineEdit" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
+custom_minimum_size = Vector2(300, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "25565"
+placeholder_text = "e.g. 25565"
+
+[node name="Buttons" type="HBoxContainer" parent="MainLayout/ContentArea/MultiplayerPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -10.0
+offset_right = 350.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="HostWifi" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "রুম তৈরি করুন (Host) 🏠"
+
+[node name="JoinRoom" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "রুমে যুক্ত হোন (Join) 🤝"
+
+[node name="MpStatusLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 80.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 22
+text = "রুম স্ট্যাটাস: নিষ্ক্রিয়"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerListLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -240.0
+offset_right = -30.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "যুক্ত প্লেয়ারদের তালিকা:"
+horizontal_alignment = 1
+
+[node name="StartMpButton" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel"]
+visible = false
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -90.0
+offset_right = 150.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 26
+text = "সবাই মিলে গেম খেলুন ▶️"
+
+[node name="SettingsPanel" type="Panel" parent="MainLayout/ContentArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/SettingsPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 15.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.9, 0.4, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "গেম সেটিংস"
+horizontal_alignment = 1
+
+[node name="VolumeContainer" type="VBoxContainer" parent="MainLayout/ContentArea/SettingsPanel"]
+layout_mode = 1
+offset_left = 30.0
+offset_top = 70.0
+offset_right = 430.0
+offset_bottom = 370.0
+theme_override_constants/separation = 15
+
+[node name="AudioLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "সাউন্ড এবং মিউজিক"
+
+[node name="MasterLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "মাস্টার ভলিউম:"
+
+[node name="MasterSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MusicLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "মিউজিক ভলিউম:"
+
+[node name="MusicSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="SfxLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "সাউন্ড এফেক্টস (SFX):"
+
+[node name="SfxSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="GraphicsContainer" type="VBoxContainer" parent="MainLayout/ContentArea/SettingsPanel"]
+layout_mode = 1
+offset_left = 480.0
+offset_top = 70.0
+offset_right = 880.0
+offset_bottom = 430.0
+theme_override_constants/separation = 15
+
+[node name="GraphicsLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "গ্রাফিক্স সেটিংস"
+
+[node name="PresetLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "গ্রাফিক্স প্রিসেট:"
+
+[node name="PresetOption" type="OptionButton" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+alignment = 1
+item_count = 3
+selected = 1
+popup/item_0/text = "Low Graphics"
+popup/item_0/id = 0
+popup/item_1/text = "Medium Graphics"
+popup/item_1/id = 1
+popup/item_2/text = "High Graphics"
+popup/item_2/id = 2
+
+[node name="DistLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "রেন্ডার ডিস্টেন্স (Render Distance):"
+
+[node name="DistSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+layout_mode = 2
+min_value = 50.0
+max_value = 1000.0
+step = 10.0
+value = 250.0
+
+[node name="ResLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "রেজুলেশন স্কেল (Resolution Scale):"
+
+[node name="ResSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+layout_mode = 2
+min_value = 0.5
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/PlayTab" to="." method="_on_play_tab_pressed"]
+[connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/GarageTab" to="." method="_on_garage_tab_pressed"]
+[connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/MultiplayerTab" to="." method="_on_multiplayer_tab_pressed"]
+[connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/SettingsTab" to="." method="_on_settings_tab_pressed"]
+[connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/ExitBtn" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/MissionGrid/Mission1" to="." method="select_mission" binds= [0]]
+[connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/MissionGrid/Mission2" to="." method="select_mission" binds= [1]]
+[connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/MissionGrid/Mission3" to="." method="select_mission" binds= [2]]
+[connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/StartGameButton" to="." method="_on_start_game_pressed"]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/RepairButton" to="." method="_on_repair_button_pressed"]
+[connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/Buttons/HostWifi" to="." method="_on_host_wifi_pressed"]
+[connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/Buttons/JoinRoom" to="." method="_on_join_room_pressed"]
+[connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/StartMpButton" to="." method="_on_start_multiplayer_game"]
+[connection signal="value_changed" from="MainLayout/ContentArea/SettingsPanel/VolumeContainer/MasterSlider" to="." method="_on_volume_changed" binds= ["Master"]]
+[connection signal="value_changed" from="MainLayout/ContentArea/SettingsPanel/VolumeContainer/MusicSlider" to="." method="_on_volume_changed" binds= ["Music"]]
+[connection signal="value_changed" from="MainLayout/ContentArea/SettingsPanel/VolumeContainer/SfxSlider" to="." method="_on_volume_changed" binds= ["SFX"]]
+[connection signal="item_selected" from="MainLayout/ContentArea/SettingsPanel/GraphicsContainer/PresetOption" to="." method="_on_preset_selected"]
+[connection signal="value_changed" from="MainLayout/ContentArea/SettingsPanel/GraphicsContainer/DistSlider" to="." method="_on_render_distance_changed"]
+[connection signal="value_changed" from="MainLayout/ContentArea/SettingsPanel/GraphicsContainer/ResSlider" to="." method="_on_res_scale_changed"]

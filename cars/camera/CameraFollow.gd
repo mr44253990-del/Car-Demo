@@ -1,16 +1,49 @@
 extends Camera3D
 
-@export var target_distance = 5
-@export var target_height = 2
-@export var speed:=20.0
+@export var target_distance = 6.0
+@export var target_height = 2.2
+@export var speed := 20.0
 var follow_this = null
-var last_lookat
+var last_lookat: Vector3
+
+# Camera modes
+enum CameraMode { NORMAL, HOOD, TOPDOWN, CLOSE }
+var current_mode: CameraMode = CameraMode.NORMAL
 
 func _ready():
+	# Add to group so MobileHUD can invoke camera change
+	add_to_group("game_camera")
+	
 	follow_this = get_parent()
-	last_lookat = follow_this.global_transform.origin
+	if follow_this:
+		last_lookat = follow_this.global_transform.origin
+	else:
+		last_lookat = Vector3.ZERO
+
+func toggle_camera_mode():
+	current_mode = (current_mode + 1) % 4 as CameraMode
+	match current_mode:
+		CameraMode.NORMAL:
+			target_distance = 6.0
+			target_height = 2.2
+			print("Camera mode: Normal")
+		CameraMode.HOOD:
+			target_distance = 1.5
+			target_height = 1.0
+			print("Camera mode: Hood")
+		CameraMode.TOPDOWN:
+			target_distance = 12.0
+			target_height = 8.0
+			print("Camera mode: Topdown")
+		CameraMode.CLOSE:
+			target_distance = 4.0
+			target_height = 1.5
+			print("Camera mode: Close")
 
 func _physics_process(delta):
+	if not is_instance_valid(follow_this):
+		return
+		
 	var delta_v = global_transform.origin - follow_this.global_transform.origin
 	var target_pos = global_transform.origin
 
@@ -28,4 +61,12 @@ func _physics_process(delta):
 	
 	last_lookat = last_lookat.lerp(follow_this.global_transform.origin, delta * speed)
 	
-	look_at(last_lookat, Vector3.UP)
+	# Adjust lookat target slightly higher than the origin
+	var lookat_target = last_lookat + Vector3(0, 0.5, 0)
+	
+	if current_mode == CameraMode.HOOD:
+		# Keep it looking forward from the car basis
+		var target_look = follow_this.global_transform.origin + follow_this.global_transform.basis.z * 5.0
+		look_at(target_look, Vector3.UP)
+	else:
+		look_at(lookat_target, Vector3.UP)
