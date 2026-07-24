@@ -37,12 +37,17 @@ const DEFAULT_PORT = 25565
 var peer = ENetMultiplayerPeer.new()
 
 func _ready():
-	# Connect multiplayer signals
-	multiplayer.peer_connected.connect(_on_player_connected)
-	multiplayer.peer_disconnected.connect(_on_player_disconnected)
-	multiplayer.connected_to_server.connect(_on_connection_success)
-	multiplayer.connection_failed.connect(_on_connection_failed)
-	multiplayer.server_disconnected.connect(_on_server_disconnected)
+	# Connect multiplayer signals safely
+	if not multiplayer.peer_connected.is_connected(_on_player_connected):
+		multiplayer.peer_connected.connect(_on_player_connected)
+	if not multiplayer.peer_disconnected.is_connected(_on_player_disconnected):
+		multiplayer.peer_disconnected.connect(_on_player_disconnected)
+	if not multiplayer.connected_to_server.is_connected(_on_connection_success):
+		multiplayer.connected_to_server.connect(_on_connection_success)
+	if not multiplayer.connection_failed.is_connected(_on_connection_failed):
+		multiplayer.connection_failed.connect(_on_connection_failed)
+	if not multiplayer.server_disconnected.is_connected(_on_server_disconnected):
+		multiplayer.server_disconnected.connect(_on_server_disconnected)
 	
 	update_global_ui()
 	show_panel(play_panel) # Default panel
@@ -50,7 +55,7 @@ func _ready():
 	select_mission(0)
 
 func update_global_ui():
-	coins_label.text = "🪙 কয়েন: " + str(GameManager.coins)
+	coins_label.text = "COINS: " + str(GameManager.coins) + " 🪙"
 	update_garage_ui()
 
 func show_panel(target_panel: Panel):
@@ -83,38 +88,37 @@ func select_mission(id: int):
 	GameManager.selected_mission_id = id
 	match id:
 		0:
-			mission_desc_label.text = "মিশন ১: ফ্রি রোম (Free Roam)\n\nকোন সময়সীমা নেই! ম্যাপে ঘুরে বেড়ান, ড্রিপ্ট করা শিখুন এবং কয়েন সংগ্রহ করুন।"
+			mission_desc_label.text = "MISSION 1: Free Roam\n\nNo time limit! Practice drifting, explore the map, collect coins, and refuel whenever you want."
 		1:
-			mission_desc_label.text = "মিশন ২: কয়েন হান্টার (Coin Rush)\n\n৯০ সেকেন্ডের মধ্যে ম্যাপের সব ছড়িয়ে থাকা কয়েন সংগ্রহ করুন! দ্রুত ড্রাইভ করুন।"
+			mission_desc_label.text = "MISSION 2: Coin Hunter\n\nCollect all 15 scattered coins on the map before time runs out! Drive fast and precise."
 		2:
-			mission_desc_label.text = "মিশন ৩: ফুয়েল সার্ভাইভার (Fuel Survivor)\n\nফুয়েল দ্রুত শেষ হবে! ফুয়েল স্টেশনে যাওয়ার আগে ফুয়েল শেষ হতে দেওয়া যাবে না।"
+			mission_desc_label.text = "MISSION 3: Fuel Survivor\n\nFuel consumption is doubled! Keep buying fuel from stations before running empty. Survive as long as you can!"
 
 func _on_start_game_pressed():
 	GameManager.reset_car_state()
 	GameManager.is_multiplayer = false
 	GameManager.transition_to_scene("res://main.tscn")
 
-# --- GARAGE SYSTEM ---
+# --- GARAGE SYSTEM (With Smart Custom Paints) ---
 func update_garage_ui():
 	var damage = GameManager.car_damage
-	damage_label.text = "গাড়ির ড্যামেজ: " + str(round(damage)) + "%"
+	damage_label.text = "Car Damage: " + str(round(damage)) + "%"
 	var cost = int(damage * 5)
-	repair_cost_label.text = "মেরামত খরচ: " + str(cost) + " 🪙 কয়েন"
+	repair_cost_label.text = "Repair Cost: " + str(cost) + " Coins"
 	
 	if damage == 0:
-		garage_car_status.text = "গাড়ির কন্ডিশন: চমৎকার! (মেরামত প্রয়োজন নেই)"
+		garage_car_status.text = "Status: Perfect Condition!"
 		garage_car_status.add_theme_color_override("font_color", Color.GREEN)
 	elif damage < 50:
-		garage_car_status.text = "গাড়ির কন্ডিশন: হালকা ড্যামেজ।"
+		garage_car_status.text = "Status: Light Scratches & Dents."
 		garage_car_status.add_theme_color_override("font_color", Color.YELLOW)
 	else:
-		garage_car_status.text = "গাড়ির কন্ডিশন: মারাত্মক ড্যামেজ! এখনই মেরামত করুন।"
+		garage_car_status.text = "Status: Heavily Damaged! Repair immediately."
 		garage_car_status.add_theme_color_override("font_color", Color.RED)
 
 func _on_repair_button_pressed():
 	var cost = int(GameManager.car_damage * 5)
 	if GameManager.car_damage <= 0:
-		mp_status_label.text = "গাড়ি ইতিমধ্যেই সম্পূর্ণ ঠিক আছে!"
 		return
 	if GameManager.coins >= cost:
 		GameManager.coins -= cost
@@ -123,8 +127,27 @@ func _on_repair_button_pressed():
 		update_global_ui()
 		update_garage_ui()
 	else:
-		# Flash error
-		repair_cost_label.text = "পর্যাপ্ত কয়েন নেই! মেরামত করতে " + str(cost) + " কয়েন লাগবে।"
+		repair_cost_label.text = "NOT ENOUGH COINS! Need " + str(cost) + " Coins"
+
+# Paint custom colors
+func _on_paint_car(color_name: String):
+	var paint_cost = 50
+	if GameManager.coins >= paint_cost:
+		GameManager.coins -= paint_cost
+		# Save selected paint color to config
+		# (We will apply this color to the car mesh in GameLevel.gd!)
+		var save_data = {
+			"coins": GameManager.coins,
+			"car_paint": color_name
+		}
+		var file = FileAccess.open("user://car_paint.cfg", FileAccess.WRITE)
+		if file:
+			file.store_var(save_data)
+			file.close()
+		update_global_ui()
+		repair_cost_label.text = "Painted " + color_name.to_upper() + "! Cost: " + str(paint_cost) + " Coins"
+	else:
+		repair_cost_label.text = "NOT ENOUGH COINS! Paint cost: " + str(paint_cost) + " Coins"
 
 # --- SETTINGS SYSTEM ---
 func init_settings_values():
@@ -171,20 +194,19 @@ func _on_res_scale_changed(value: float):
 	GameManager.apply_graphics_settings()
 	GameManager.save_game_settings()
 
-# --- MULTIPLAYER SYSTEM (WiFi / Hotspot Offline) ---
+# --- MULTIPLAYER SYSTEM ---
 func _on_host_wifi_pressed():
-	# Start server
 	var port = int(port_input.text) if port_input.text != "" else DEFAULT_PORT
 	peer.close()
 	var err = peer.create_server(port, 6) # max 6 players
 	if err != OK:
-		mp_status_label.text = "রুম তৈরি করতে ব্যর্থ! এরর কোড: " + str(err)
+		mp_status_label.text = "Failed to host room! Error: " + str(err)
 		return
 	
 	multiplayer.multiplayer_peer = peer
 	GameManager.is_multiplayer = true
 	GameManager.is_host = true
-	mp_status_label.text = "রুম তৈরি হয়েছে! পোর্ট: " + str(port) + "\nআপনার আইপি অ্যাড্রেস বন্ধুদের দিন।"
+	mp_status_label.text = "Room Created! Port: " + str(port) + "\nShare your Hotspot/WiFi IP with friends."
 	start_mp_btn.visible = true
 	update_players_list()
 
@@ -192,11 +214,11 @@ func _on_join_room_pressed():
 	var ip = ip_input.text if ip_input.text != "" else "127.0.0.1"
 	var port = int(port_input.text) if port_input.text != "" else DEFAULT_PORT
 	
-	mp_status_label.text = "কানেক্ট করা হচ্ছে: " + ip + ":" + str(port) + "..."
+	mp_status_label.text = "Connecting to " + ip + ":" + str(port) + "..."
 	peer.close()
 	var err = peer.create_client(ip, port)
 	if err != OK:
-		mp_status_label.text = "কানেকশন শুরু করতে ব্যর্থ! এরর কোড: " + str(err)
+		mp_status_label.text = "Connection failed! Error: " + str(err)
 		return
 		
 	multiplayer.multiplayer_peer = peer
@@ -206,7 +228,6 @@ func _on_join_room_pressed():
 
 func _on_start_multiplayer_game():
 	if GameManager.is_host:
-		# Inform all clients to load the game
 		start_game_rpc.rpc()
 
 @rpc("any_peer", "call_local", "reliable")
@@ -215,28 +236,28 @@ func start_game_rpc():
 	GameManager.transition_to_scene("res://main.tscn")
 
 func _on_player_connected(id: int):
-	mp_status_label.text = "নতুন খেলোয়াড় যুক্ত হয়েছে! আইডি: " + str(id)
+	mp_status_label.text = "Player connected! ID: " + str(id)
 	update_players_list()
 
 func _on_player_disconnected(id: int):
-	mp_status_label.text = "খেলোয়াড় চলে গেছে! আইডি: " + str(id)
+	mp_status_label.text = "Player disconnected! ID: " + str(id)
 	update_players_list()
 
 func _on_connection_success():
-	mp_status_label.text = "রুমে সফলভাবে যুক্ত হয়েছেন!"
+	mp_status_label.text = "Successfully joined the room!"
 	update_players_list()
 
 func _on_connection_failed():
-	mp_status_label.text = "কানেকশন ব্যর্থ হয়েছে! আইপি বা পোর্ট চেক করুন।"
+	mp_status_label.text = "Failed to connect to host! Check IP."
 
 func _on_server_disconnected():
-	mp_status_label.text = "হোস্ট সার্ভার বন্ধ করে দিয়েছে।"
+	mp_status_label.text = "Host disconnected."
 	start_mp_btn.visible = false
 	GameManager.is_multiplayer = false
 
 func update_players_list():
-	var plist = "যুক্ত প্লেয়ারদের তালিকা:\n"
-	plist += "- হোস্ট (আপনি)\n" if GameManager.is_host else "- হোস্ট\n"
+	var plist = "Connected Players:\n"
+	plist += "- Host (You)\n" if GameManager.is_host else "- Host\n"
 	for p in multiplayer.get_peers():
-		plist += "- প্লেয়ার " + str(p) + "\n"
+		plist += "- Player " + str(p) + "\n"
 	player_list_label.text = plist

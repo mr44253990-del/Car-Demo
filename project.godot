@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CarDemo"
-run/main_scene="res://Scenes/MainMenu.tscn"
+run/main_scene="res://Scenes/LoadingScreen.tscn"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://project_icon.png"
 

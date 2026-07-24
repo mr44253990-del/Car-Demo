@@ -8,7 +8,7 @@ const REFUEL_COST = 2 # 2 coins per refuel step
 const REFUEL_AMOUNT = 5.0 # 5% fuel per refuel step
 
 func _ready():
-	info_label.text = "⛽ ফুয়েল স্টেশন\nকয়েন দিয়ে ফুয়েল কিনুন!\n(এখানে গাড়ি থামিয়ে রাখুন)"
+	info_label.text = "⛽ FUEL STATION\nBuy fuel with coins!\n(Park your car here)"
 	info_label.visible = false
 
 func _on_body_entered(body):
@@ -31,8 +31,8 @@ func _process(delta):
 					GameManager.coins -= REFUEL_COST
 					GameManager.car_fuel = clamp(GameManager.car_fuel + REFUEL_AMOUNT, 0.0, GameManager.car_max_fuel)
 					GameManager.save_game_settings()
-					info_label.text = "⛽ ফুয়েল রি-চার্জ হচ্ছে...\nফুয়েল: " + str(round(GameManager.car_fuel)) + "%\n🪙 -" + str(REFUEL_COST)
+					info_label.text = "⛽ Refueling...\nFuel: " + str(round(GameManager.car_fuel)) + "%\n🪙 -" + str(REFUEL_COST)
 				else:
-					info_label.text = "⛽ ফুয়েল স্টেশন\nপর্যাপ্ত কয়েন নেই! 🪙"
+					info_label.text = "⛽ FUEL STATION\nNot enough coins! 🪙"
 		else:
-			info_label.text = "⛽ ফুয়েল সম্পূর্ণ ফুল! 🔋\nধন্যবাদ!"
+			info_label.text = "⛽ Fuel Tank Full! 🔋\nReady to go!"

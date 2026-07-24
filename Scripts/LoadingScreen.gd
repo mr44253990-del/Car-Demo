@@ -8,26 +8,23 @@ extends Control
 var target_scene: String
 var progress = []
 var tips = [
-	"ড্রিফ্ট করার জন্য Space বা Drift বোতাম চেপে ধরুন!",
-	"গাড়ির ক্ষতি হলে গ্যারেজ অথবা গেম মেনু থেকে মেরামত করতে পারেন।",
-	"ফুয়েল শেষ হওয়ার আগে ফুয়েল স্টেশনে গিয়ে ফুয়েল কিনে নিন!",
-	"মাল্টিপ্লেয়ারে বন্ধুদের সাথে খেলতে WiFi অথবা Hotspot দিয়ে হোস্ট করুন।",
-	"সেটিংস থেকে আপনার ফোনের ক্ষমতা অনুযায়ী গ্রাফিক্স পরিবর্তন করতে পারেন।",
-	"কয়েন সংগ্রহ করতে পুরো ম্যাপ ঘুরে দেখুন এবং মিশন কমপ্লিট করুন!"
+	"Hold Space or touch DRIFT button to slide around corners!",
+	"If your car gets damaged, visit the Garage or Game Menu to repair it.",
+	"Keep an eye on your fuel! Drive to the nearest Fuel Station before it runs out.",
+	"Play with friends offline! Host a WiFi or Hotspot room, no internet required.",
+	"Optimize your game! Adjust Graphics Settings in the menu to match your device.",
+	"Explore the map to find hidden gold coins and unlock secret features!"
 ]
 
 func _ready():
-	# Randomize tips
 	randomize()
-	tip_label.text = "পরামর্শ: " + tips[randi() % tips.size()]
+	tip_label.text = "Tip: " + tips[randi() % tips.size()]
 	
-	# Determine target scene
 	if GameManager.target_scene_path != "":
 		target_scene = GameManager.target_scene_path
 	else:
 		target_scene = "res://Scenes/MainMenu.tscn" # Default fallback
 		
-	# Start threaded loading
 	var err = ResourceLoader.load_threaded_request(target_scene)
 	if err != OK:
 		print("Error launching threaded load: ", err)

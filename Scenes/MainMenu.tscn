@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://cb3u27qy6ox1e"]
 
-[ext_resource type="Script" uid="uid://cfglmx3bwyunh" path="res://Scripts/MainMenu.gd" id="1_mainmenu"]
+[ext_resource type="Script" path="res://Scripts/MainMenu.gd" id="1_mainmenu"]
 
 [sub_resource type="Gradient" id="Gradient_menu"]
-colors = PackedColorArray(0.08, 0.08, 0.15, 1, 0.15, 0.15, 0.3, 1)
+colors = PackedColorArray(0.04, 0.04, 0.1, 1, 0.1, 0.08, 0.22, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_menu"]
 gradient = SubResource("Gradient_menu")
@@ -11,16 +11,18 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.121569, 0.121569, 0.2, 0.82)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.25, 0.25, 0.45, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+bg_color = Color(0.05, 0.05, 0.12, 0.65)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0.75, 1, 0.3)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 15
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -45,7 +47,7 @@ expand_mode = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 100.0
+offset_bottom = 120.0
 grow_horizontal = 2
 
 [node name="TitleLabel" type="Label" parent="TopBar"]
@@ -53,12 +55,12 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 30.0
-offset_top = -25.0
-offset_right = 530.0
-offset_top = 25.0
+offset_left = 40.0
+offset_top = -30.0
+offset_right = 640.0
+offset_top = 30.0
 grow_vertical = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 42
 text = "🚗 CAR DEMO: ULTIMATE"
 vertical_alignment = 1
 
@@ -69,15 +71,15 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -25.0
-offset_right = -30.0
-offset_top = 25.0
+offset_left = -500.0
+offset_top = -30.0
+offset_right = -40.0
+offset_top = 30.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
-theme_override_font_sizes/font_size = 32
-text = "🪙 কয়েন: ০"
+theme_override_font_sizes/font_size = 36
+text = "COINS: 0 🪙"
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -86,14 +88,16 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 120.0
-offset_bottom = -20.0
+offset_left = 30.0
+offset_top = 150.0
+offset_right = -30.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 30
 
 [node name="Sidebar" type="Panel" parent="MainLayout"]
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(360, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
@@ -102,48 +106,48 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 15.0
-offset_top = 20.0
-offset_right = -15.0
-offset_bottom = -20.0
+offset_left = 25.0
+offset_top = 30.0
+offset_right = -25.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 20
 
 [node name="PlayTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "মিশন খেলুন 🎮"
+theme_override_font_sizes/font_size = 32
+text = "MISSIONS 🎮"
 
 [node name="GarageTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "গ্যারেজ 🛠️"
+theme_override_font_sizes/font_size = 32
+text = "GARAGE 🛠️"
 
 [node name="MultiplayerTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "মাল্টিপ্লেয়ার 🌐"
+theme_override_font_sizes/font_size = 32
+text = "MULTIPLAYER 🌐"
 
 [node name="SettingsTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "সেটিংস ⚙️"
+theme_override_font_sizes/font_size = 32
+text = "SETTINGS ⚙️"
 
 [node name="Spacer" type="Control" parent="MainLayout/Sidebar/ButtonsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="ExitBtn" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_font_sizes/font_size = 28
-text = "বাহির হন ❌"
+theme_override_font_sizes/font_size = 32
+text = "QUIT GAME ❌"
 
 [node name="ContentArea" type="Control" parent="MainLayout"]
 layout_mode = 2
@@ -154,7 +158,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
@@ -163,12 +166,12 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 20.0
-offset_bottom = 70.0
+offset_top = 30.0
+offset_bottom = 80.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 32
-text = "মিশন নির্বাচন করুন"
+theme_override_font_sizes/font_size = 38
+text = "CHOOSE MISSION"
 horizontal_alignment = 1
 
 [node name="MissionGrid" type="HBoxContainer" parent="MainLayout/ContentArea/PlayPanel"]
@@ -177,32 +180,35 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 30.0
-offset_top = -140.0
-offset_right = -30.0
-offset_bottom = -40.0
+offset_left = 40.0
+offset_top = -180.0
+offset_right = -40.0
+offset_bottom = -70.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
 [node name="Mission1" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
-text = "মিশন ১: ফ্রি রোম"
+theme_override_font_sizes/font_size = 26
+text = "Mission 1\nFree Roam"
 
 [node name="Mission2" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
-text = "মিশন ২: কয়েন হান্টার"
+theme_override_font_sizes/font_size = 26
+text = "Mission 2\nCoin Rush"
 
 [node name="Mission3" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
-text = "মিশন ৩: ফুয়েল সারভাইভার"
+theme_override_font_sizes/font_size = 26
+text = "Mission 3\nFuel Survivor"
 
 [node name="MissionDescLabel" type="Label" parent="MainLayout/ContentArea/PlayPanel"]
 layout_mode = 1
@@ -210,35 +216,35 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 50.0
-offset_top = -10.0
-offset_right = -50.0
-offset_bottom = 140.0
+offset_left = 60.0
+offset_top = -40.0
+offset_right = -60.0
+offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 24
-text = "মিশনের বিবরণ এখানে দেখানো হবে।"
+theme_override_font_sizes/font_size = 26
+text = "Select a mission to view details."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="StartGameButton" type="Button" parent="MainLayout/ContentArea/PlayPanel"]
-custom_minimum_size = Vector2(300, 80)
+custom_minimum_size = Vector2(350, 90)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -150.0
-offset_top = -100.0
-offset_right = 150.0
-offset_bottom = -20.0
+offset_left = -175.0
+offset_top = -120.0
+offset_right = 175.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
-theme_override_font_sizes/font_size = 32
-text = "গেম শুরু করুন 🏁"
+theme_override_font_sizes/font_size = 36
+text = "START GAME 🏁"
 
 [node name="GaragePanel" type="Panel" parent="MainLayout/ContentArea"]
 visible = false
@@ -246,7 +252,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
@@ -255,12 +260,12 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 20.0
-offset_bottom = 70.0
+offset_top = 30.0
+offset_bottom = 80.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.6, 0, 1)
-theme_override_font_sizes/font_size = 32
-text = "গ্যারেজ (গাড়ি মেরামত)"
+theme_override_font_sizes/font_size = 38
+text = "VEHICLE GARAGE"
 horizontal_alignment = 1
 
 [node name="CarStatusLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
@@ -269,12 +274,12 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -150.0
-offset_bottom = -100.0
+offset_top = -190.0
+offset_bottom = -140.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 28
-text = "গাড়ির কন্ডিশন: চমৎকার!"
+theme_override_font_sizes/font_size = 30
+text = "Status: Perfect"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -284,13 +289,13 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -80.0
-offset_bottom = -30.0
+offset_top = -120.0
+offset_bottom = -70.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_font_sizes/font_size = 28
-text = "গাড়ির ড্যামেজ: ০%"
+theme_override_font_sizes/font_size = 30
+text = "Car Damage: 0%"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -300,33 +305,96 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -10.0
-offset_bottom = 40.0
+offset_top = -50.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
-theme_override_font_sizes/font_size = 28
-text = "মেরামত খরচ: ০ কয়েন"
+theme_override_font_sizes/font_size = 30
+text = "Repair Cost: 0 Coins"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="RepairButton" type="Button" parent="MainLayout/ContentArea/GaragePanel"]
-custom_minimum_size = Vector2(350, 80)
+custom_minimum_size = Vector2(400, 85)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -175.0
-offset_top = -140.0
-offset_right = 175.0
-offset_bottom = -60.0
+offset_left = -200.0
+offset_top = -240.0
+offset_right = 200.0
+offset_bottom = -155.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0, 0.8, 1, 1)
 theme_override_font_sizes/font_size = 32
-text = "গাড়ি মেরামত করুন 🛠️"
+text = "REPAIR VEHICLE 🛠️"
+
+[node name="PaintLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -140.0
+offset_right = 300.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Customize Paint Job (Cost: 50 🪙):"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PaintColors" type="HBoxContainer" parent="MainLayout/ContentArea/GaragePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -90.0
+offset_right = 300.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Red" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+text = "RED 🔴"
+
+[node name="Blue" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.6, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "BLUE 🔵"
+
+[node name="Green" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 22
+text = "GREEN 🟢"
+
+[node name="Gold" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 22
+text = "GOLD 🟡"
 
 [node name="MultiplayerPanel" type="Panel" parent="MainLayout/ContentArea"]
 visible = false
@@ -334,7 +402,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
@@ -343,12 +410,12 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 20.0
-offset_bottom = 70.0
+offset_top = 30.0
+offset_bottom = 80.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.2, 0.8, 0.4, 1)
-theme_override_font_sizes/font_size = 32
-text = "অফলাইন মাল্টিপ্লেয়ার (ওয়াইফাই / হটস্পট)"
+theme_override_font_sizes/font_size = 38
+text = "OFFLINE MULTIPLAYER"
 horizontal_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="MainLayout/ContentArea/MultiplayerPanel"]
@@ -358,37 +425,37 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -160.0
-offset_right = 300.0
-offset_bottom = -40.0
+offset_left = -330.0
+offset_top = -220.0
+offset_right = 330.0
+offset_bottom = -80.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/horizontal_separation = 20
-theme_override_constants/vertical_separation = 15
+theme_override_constants/horizontal_separation = 30
+theme_override_constants/vertical_separation = 20
 columns = 2
 
 [node name="IpLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "আইপি অ্যাড্রেস (হোস্ট):"
+theme_override_font_sizes/font_size = 26
+text = "Host IP Address:"
 
 [node name="IpInput" type="LineEdit" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
-custom_minimum_size = Vector2(300, 45)
+custom_minimum_size = Vector2(340, 55)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 text = "192.168.43.1"
 placeholder_text = "e.g. 192.168.43.1"
 
 [node name="PortLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "সার্ভার পোর্ট:"
+theme_override_font_sizes/font_size = 26
+text = "Server Port:"
 
 [node name="PortInput" type="LineEdit" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
-custom_minimum_size = Vector2(300, 45)
+custom_minimum_size = Vector2(340, 55)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 text = "25565"
 placeholder_text = "e.g. 25565"
 
@@ -400,25 +467,27 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -350.0
-offset_top = -10.0
+offset_top = -40.0
 offset_right = 350.0
-offset_bottom = 60.0
+offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="HostWifi" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel/Buttons"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
-text = "রুম তৈরি করুন (Host) 🏠"
+theme_override_font_sizes/font_size = 26
+text = "CREATE ROOM 🏠"
 
 [node name="JoinRoom" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel/Buttons"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
-text = "রুমে যুক্ত হোন (Join) 🤝"
+theme_override_font_sizes/font_size = 26
+text = "JOIN ROOM 🤝"
 
 [node name="MpStatusLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel"]
 layout_mode = 1
@@ -426,12 +495,12 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = 80.0
-offset_bottom = 130.0
+offset_top = 60.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 22
-text = "রুম স্ট্যাটাস: নিষ্ক্রিয়"
+theme_override_font_sizes/font_size = 24
+text = "Status: Idle"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -441,34 +510,34 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 30.0
-offset_top = -240.0
-offset_right = -30.0
-offset_bottom = -100.0
+offset_left = 40.0
+offset_top = -230.0
+offset_right = -40.0
+offset_bottom = -110.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 20
-text = "যুক্ত প্লেয়ারদের তালিকা:"
+theme_override_font_sizes/font_size = 22
+text = "Connected Players:"
 horizontal_alignment = 1
 
 [node name="StartMpButton" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel"]
 visible = false
-custom_minimum_size = Vector2(300, 70)
+custom_minimum_size = Vector2(350, 80)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -150.0
-offset_top = -90.0
-offset_right = 150.0
+offset_left = -175.0
+offset_top = -100.0
+offset_right = 175.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
-theme_override_font_sizes/font_size = 26
-text = "সবাই মিলে গেম খেলুন ▶️"
+theme_override_font_sizes/font_size = 28
+text = "PLAY MULTIPLAYER ▶️"
 
 [node name="SettingsPanel" type="Panel" parent="MainLayout/ContentArea"]
 visible = false
@@ -476,7 +545,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
@@ -485,34 +553,35 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 15.0
-offset_bottom = 60.0
+offset_top = 20.0
+offset_bottom = 70.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.9, 0.4, 1, 1)
-theme_override_font_sizes/font_size = 32
-text = "গেম সেটিংস"
+theme_override_font_sizes/font_size = 38
+text = "GAME SETTINGS"
 horizontal_alignment = 1
 
 [node name="VolumeContainer" type="VBoxContainer" parent="MainLayout/ContentArea/SettingsPanel"]
 layout_mode = 1
-offset_left = 30.0
-offset_top = 70.0
-offset_right = 430.0
-offset_bottom = 370.0
-theme_override_constants/separation = 15
+offset_left = 40.0
+offset_top = 90.0
+offset_right = 460.0
+offset_bottom = 450.0
+theme_override_constants/separation = 20
 
 [node name="AudioLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "সাউন্ড এবং মিউজিক"
+theme_override_font_sizes/font_size = 28
+text = "Sound & Music"
 
 [node name="MasterLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "মাস্টার ভলিউম:"
+theme_override_font_sizes/font_size = 22
+text = "Master Volume:"
 
 [node name="MasterSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 max_value = 1.0
 step = 0.05
@@ -520,10 +589,11 @@ value = 1.0
 
 [node name="MusicLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "মিউজিক ভলিউম:"
+theme_override_font_sizes/font_size = 22
+text = "Music Volume:"
 
 [node name="MusicSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 max_value = 1.0
 step = 0.05
@@ -531,10 +601,11 @@ value = 0.8
 
 [node name="SfxLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "সাউন্ড এফেক্টস (SFX):"
+theme_override_font_sizes/font_size = 22
+text = "Sound Effects (SFX):"
 
 [node name="SfxSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 max_value = 1.0
 step = 0.05
@@ -542,27 +613,27 @@ value = 0.8
 
 [node name="GraphicsContainer" type="VBoxContainer" parent="MainLayout/ContentArea/SettingsPanel"]
 layout_mode = 1
-offset_left = 480.0
-offset_top = 70.0
-offset_right = 880.0
-offset_bottom = 430.0
-theme_override_constants/separation = 15
+offset_left = 520.0
+offset_top = 90.0
+offset_right = 940.0
+offset_bottom = 470.0
+theme_override_constants/separation = 20
 
 [node name="GraphicsLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "গ্রাফিক্স সেটিংস"
+theme_override_font_sizes/font_size = 28
+text = "Graphics Engine"
 
 [node name="PresetLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "গ্রাফিক্স প্রিসেট:"
+theme_override_font_sizes/font_size = 22
+text = "Graphics Preset:"
 
 [node name="PresetOption" type="OptionButton" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 alignment = 1
 item_count = 3
 selected = 1
@@ -575,10 +646,11 @@ popup/item_2/id = 2
 
 [node name="DistLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "রেন্ডার ডিস্টেন্স (Render Distance):"
+theme_override_font_sizes/font_size = 22
+text = "Render Distance (Render Limit):"
 
 [node name="DistSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 min_value = 50.0
 max_value = 1000.0
@@ -587,10 +659,11 @@ value = 250.0
 
 [node name="ResLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "রেজুলেশন স্কেল (Resolution Scale):"
+theme_override_font_sizes/font_size = 22
+text = "Resolution Scale (3D Pixel Density):"
 
 [node name="ResSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 min_value = 0.5
 max_value = 2.0
@@ -607,6 +680,10 @@ value = 1.0
 [connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/MissionGrid/Mission3" to="." method="select_mission" binds= [2]]
 [connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/StartGameButton" to="." method="_on_start_game_pressed"]
 [connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/RepairButton" to="." method="_on_repair_button_pressed"]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/PaintColors/Red" to="." method="_on_paint_car" binds= ["red"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/PaintColors/Blue" to="." method="_on_paint_car" binds= ["blue"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/PaintColors/Green" to="." method="_on_paint_car" binds= ["green"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/PaintColors/Gold" to="." method="_on_paint_car" binds= ["gold"]]
 [connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/Buttons/HostWifi" to="." method="_on_host_wifi_pressed"]
 [connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/Buttons/JoinRoom" to="." method="_on_join_room_pressed"]
 [connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/StartMpButton" to="." method="_on_start_multiplayer_game"]

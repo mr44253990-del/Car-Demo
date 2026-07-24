@@ -39,7 +39,7 @@ shape = SubResource("BoxShape3D_fuel")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 0)
 billboard = 1
 double_sided = false
-text = "⛽ ফুয়েল স্টেশন"
+text = "⛽ FUEL STATION"
 font_size = 42
 outline_size = 12
 

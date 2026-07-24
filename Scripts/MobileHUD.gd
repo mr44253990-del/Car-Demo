@@ -35,18 +35,18 @@ func _ready():
 	# Update HUD display according to selected mission
 	match GameManager.selected_mission_id:
 		0:
-			mission_status_label.text = "মিশন: ফ্রি রোম (কোন সময়সীমা নেই)"
+			mission_status_label.text = "MISSION: Free Roam (No time limit)"
 		1:
-			mission_status_label.text = "মিশন: কয়েন হান্টার (কয়েন সংগ্রহ করুন)"
+			mission_status_label.text = "MISSION: Coin Rush (Collect all coins)"
 		2:
-			mission_status_label.text = "মিশন: ফুয়েল সারভাইভার (ফুয়েল শেষ হতে দেবেন না)"
+			mission_status_label.text = "MISSION: Fuel Survivor (Refuel before empty)"
 
 func _process(delta):
 	# Update FPS
 	fps_label.text = "FPS: " + str(Engine.get_frames_per_second())
 	
 	# Update Coins
-	coins_label.text = "🪙 কয়েন: " + str(GameManager.coins)
+	coins_label.text = "COINS: " + str(GameManager.coins) + " 🪙"
 	
 	# Find car if null (in multiplayer or spawn delay)
 	if not is_instance_valid(car_node):
@@ -62,20 +62,19 @@ func _process(delta):
 		
 	# Update Fuel and Damage bars
 	fuel_bar.value = GameManager.car_fuel
-	fuel_label.text = "ফুয়েল: " + str(round(GameManager.car_fuel)) + "%"
+	fuel_label.text = "FUEL: " + str(round(GameManager.car_fuel)) + "%"
 	
 	damage_bar.value = GameManager.car_damage
-	damage_label.text = "ড্যামেজ: " + str(round(GameManager.car_damage)) + "%"
+	damage_label.text = "DAMAGE: " + str(round(GameManager.car_damage)) + "%"
 	
 	# Mission conditions
 	if GameManager.selected_mission_id == 1:
-		# Coin Hunt count
 		var remaining_coins = get_tree().get_nodes_in_group("coins").size()
 		if remaining_coins == 0:
-			mission_status_label.text = "অভিনন্দন! সব কয়েন সংগ্রহ করেছেন!"
+			mission_status_label.text = "CONGRATULATIONS! Collected all coins!"
 			mission_status_label.add_theme_color_override("font_color", Color.GREEN)
 		else:
-			mission_status_label.text = "অবশিষ্ট কয়েন: " + str(remaining_coins)
+			mission_status_label.text = "Coins Remaining: " + str(remaining_coins)
 
 # --- TOUCH CONTROLS SIMULATION ---
 func _on_left_pressed():
@@ -103,7 +102,7 @@ func _on_backward_released():
 	Input.action_release("backward")
 
 func _on_drift_pressed():
-	Input.action_press("ui_select") # Space/select maps to brake/drift in BaseCar
+	Input.action_press("ui_select")
 
 func _on_drift_released():
 	Input.action_release("ui_select")
@@ -114,14 +113,12 @@ func _on_gear_pressed():
 	Input.action_release("gear")
 
 func _on_camera_pressed():
-	# Notify camera to change
 	var cameras = get_tree().get_nodes_in_group("game_camera")
 	for cam in cameras:
 		if cam.has_method("toggle_camera_mode"):
 			cam.toggle_camera_mode()
 
 func _on_reset_pressed():
-	# Simulate reset (Esc)
 	Input.action_press("ui_cancel")
 	await get_tree().create_timer(0.1).timeout
 	Input.action_release("ui_cancel")

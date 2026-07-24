@@ -1,11 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cx404u2pxw71n"]
+[gd_scene load_steps=6 format=3 uid="uid://cx404u2pxw71n"]
 
-[sub_resource type="GDScript" id="GDScript_loading"]
-script/source = "extends Control
-"
+[ext_resource type="Script" path="res://Scripts/LoadingScreen.gd" id="1_load"]
 
 [sub_resource type="Gradient" id="Gradient_loading"]
-colors = PackedColorArray(0.05, 0.05, 0.15, 1, 0.15, 0.1, 0.25, 1)
+colors = PackedColorArray(0.04, 0.04, 0.1, 1, 0.12, 0.08, 0.22, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_loading"]
 gradient = SubResource("Gradient_loading")
@@ -40,7 +38,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("res://Scripts/LoadingScreen.gd")
+script = ExtResource("1_load")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -59,16 +57,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -180.0
-offset_right = 300.0
-offset_top = -120.0
+offset_left = -450.0
+offset_top = -220.0
+offset_right = 450.0
+offset_bottom = -140.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 56
 text = "CAR DEMO: PRO EDITION"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -84,20 +82,20 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SpinningWheel" type="TextureRect" parent="LoadingIcon"]
-modulate = Color(1, 0.7, 0, 1)
+modulate = Color(0, 0.8, 1, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = 64.0
+offset_left = -80.0
+offset_top = -80.0
+offset_right = 80.0
+offset_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(64, 64)
+pivot_offset = Vector2(80, 80)
 texture = ExtResource("res://project_icon.png")
 expand_mode = 1
 
@@ -107,13 +105,13 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 100.0
-offset_top = -150.0
-offset_right = -100.0
-offset_bottom = -110.0
+offset_left = 150.0
+offset_top = -180.0
+offset_right = -150.0
+offset_bottom = -140.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 22
 step = 1.0
 
 [node name="TipLabel" type="Label" parent="."]
@@ -123,14 +121,14 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 100.0
-offset_top = -220.0
+offset_top = -260.0
 offset_right = -100.0
-offset_bottom = -170.0
+offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.9, 0.9, 0.95, 1)
+theme_override_colors/font_color = Color(0.85, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 24
-text = "পরামর্শ: ড্রিফ্ট করার জন্য Space বা Drift বোতাম চেপে ধরুন!"
+text = "Tip: Hold Space or touch Drift to slide around corners!"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -142,12 +140,12 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 100.0
-offset_top = -100.0
+offset_top = -120.0
 offset_right = -100.0
-offset_bottom = -60.0
+offset_bottom = -70.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 28
 text = "0%"
 horizontal_alignment = 1
 vertical_alignment = 1
