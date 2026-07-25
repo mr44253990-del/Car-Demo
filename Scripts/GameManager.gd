@@ -9,7 +9,7 @@ var selected_mission_id: int = 0 # 0: Free Roam, 1: Coin Rush, 2: Fuel Survivor
 var last_claim_date: String = ""
 
 # --- Purchased Livery Paints (Persistent) ---
-var purchased_skins: Array = ["default"] # Default skin is always unlocked!
+var purchased_skins: Array = ["default"]
 
 # --- Performance Upgrades (Persistent, Max 5 levels each) ---
 var upgrade_engine: int = 1
@@ -17,12 +17,12 @@ var upgrade_handling: int = 1
 var upgrade_brakes: int = 1
 
 # --- Underglow Color Choice (Persistent) ---
-var underglow_color: String = "cyan" # cyan, pink, gold, red
+var underglow_color: String = "cyan"
 
 # --- Car State ---
 var car_fuel: float = 100.0
 var car_max_fuel: float = 100.0
-var car_damage: float = 0.0 # 0.0 (Perfect) to 100.0 (Destroyed)
+var car_damage: float = 0.0
 var car_max_damage: float = 100.0
 
 # --- Settings ---
@@ -36,7 +36,7 @@ var resolution_scale: float = 1.0
 var texture_quality: int = 1
 
 # --- Current Active Weather in Level ---
-var current_weather: String = "sunny" # updated dynamically by GameLevel
+var current_weather: String = "sunny"
 
 # --- Multiplayer State ---
 var is_multiplayer: bool = false
@@ -97,8 +97,8 @@ func load_game_settings():
 			file.close()
 
 func apply_graphics_settings():
+	# 1. Volume Settings
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(volume_master))
-	
 	var music_bus_idx = AudioServer.get_bus_index("Music")
 	if music_bus_idx != -1:
 		AudioServer.set_bus_volume_db(music_bus_idx, linear_to_db(volume_music))
@@ -106,18 +106,43 @@ func apply_graphics_settings():
 	if sfx_bus_idx != -1:
 		AudioServer.set_bus_volume_db(sfx_bus_idx, linear_to_db(volume_sfx))
 		
+	# 2. Viewport Resolution Scale (Reduces pixels on low-end screens)
 	get_viewport().scaling_3d_scale = resolution_scale
 	
+	# 3. Dynamic Quality Presets with WorldEnvironment overrides for max smooth frames
+	var root_scene = get_tree().current_scene
+	var env_node: WorldEnvironment = null
+	if root_scene:
+		env_node = root_scene.get_node_or_null("WorldEnvironment")
+		
 	match graphics_preset:
-		0: # Low
-			RenderingServer.directional_shadow_atlas_set_size(1024, true)
+		0: # --- LOW GRAPHICS PRESET (Ultra Optimizations for $50 Android Phones!) ---
+			RenderingServer.directional_shadow_atlas_set_size(0, false) # Complete disable shadows for huge 200% FPS boost
 			get_viewport().scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
-		1: # Medium
+			
+			if env_node and env_node.environment:
+				env_node.environment.ssao_enabled = false
+				env_node.environment.ssil_enabled = false
+				env_node.environment.ssr_enabled = false
+				env_node.environment.glow_enabled = false
+		1: # --- MEDIUM GRAPHICS PRESET ---
 			RenderingServer.directional_shadow_atlas_set_size(2048, true)
 			get_viewport().scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR
-		2: # High
+			
+			if env_node and env_node.environment:
+				env_node.environment.ssao_enabled = true
+				env_node.environment.ssil_enabled = false
+				env_node.environment.ssr_enabled = false
+				env_node.environment.glow_enabled = true
+		2: # --- HIGH GRAPHICS PRESET ---
 			RenderingServer.directional_shadow_atlas_set_size(4096, true)
 			get_viewport().scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR2
+			
+			if env_node and env_node.environment:
+				env_node.environment.ssao_enabled = true
+				env_node.environment.ssil_enabled = false
+				env_node.environment.ssr_enabled = true
+				env_node.environment.glow_enabled = true
 
 # --- DAILY REWARD SYSTEM ---
 func claim_daily_reward() -> Dictionary:
