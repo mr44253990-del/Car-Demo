@@ -22,7 +22,13 @@ extends CanvasLayer
 @onready var refuel_menu = $RefuelMenu
 @onready var refuel_status_label = $RefuelMenu/StatusLabel
 
+# Nitro & Drift Score UI References
+@onready var nitro_bar = $MainContainer/StatsContainer/NitroBar
+@onready var nitro_label = $MainContainer/StatsContainer/NitroBar/Label
+@onready var drift_label = $MainContainer/DriftLabel
+
 var car_node: BaseCar = null
+var is_nitro_held: bool = false
 
 func _ready():
 	add_to_group("mobile_hud")
@@ -30,6 +36,7 @@ func _ready():
 	pause_menu.visible = false
 	refuel_menu.visible = false
 	refuel_prompt_btn.visible = false
+	drift_label.visible = false
 	
 	# Try to find car
 	var cars = get_tree().get_nodes_in_group("player_car")
@@ -69,6 +76,10 @@ func _process(delta):
 		speed_label.text = str(speed_kmh) + " KMPH"
 		gear_label.text = "Gear: " + ("A" if car_node.speed > 0 else "N") + str(car_node.gearshift)
 		
+		# Update Nitro progress bar
+		nitro_bar.value = car_node.nitro_fuel
+		nitro_label.text = "NITRO: " + str(round(car_node.nitro_fuel)) + "%"
+		
 	# Update Fuel and Damage bars
 	fuel_bar.value = GameManager.car_fuel
 	fuel_label.text = "FUEL: " + str(round(GameManager.car_fuel)) + "%"
@@ -84,6 +95,25 @@ func _process(delta):
 			mission_status_label.add_theme_color_override("font_color", Color.GREEN)
 		else:
 			mission_status_label.text = "Coins Remaining: " + str(remaining_coins)
+
+# --- DRIFT SCORE INTERACTION ---
+func update_drift_score(score: float, active: bool, coins_earned: int = 0):
+	if not is_instance_valid(drift_label):
+		return
+		
+	if active:
+		drift_label.visible = true
+		drift_label.text = "DRIFT: " + str(score) + " PTS 🔥"
+		drift_label.add_theme_color_override("font_color", Color(1, 0, 0.45)) # neon pink
+	else:
+		if coins_earned > 0:
+			drift_label.visible = true
+			drift_label.text = "DRIFT COMBOS SECURED!\n+" + str(coins_earned) + " COINS 🪙"
+			drift_label.add_theme_color_override("font_color", Color.GREEN)
+			# Hide after 2 seconds
+			get_tree().create_timer(2.0).timeout.connect(func(): drift_label.visible = false)
+		else:
+			drift_label.visible = false
 
 # --- REFUEL STATION INTERACTION ---
 func show_refuel_prompt(is_visible: bool):
@@ -111,7 +141,7 @@ func _on_buy_fuel_pressed(pct: int, cost: int):
 func _on_close_refuel_pressed():
 	refuel_menu.visible = false
 
-# --- LIGHTS & HORN CONTROLS ---
+# --- LIGHTS, HORN & NITRO CONTROLS ---
 func _on_lights_pressed():
 	if is_instance_valid(car_node) and car_node.has_method("toggle_headlights"):
 		car_node.toggle_headlights(not car_node.headlights_active)
@@ -123,6 +153,16 @@ func _on_horn_pressed():
 func _on_horn_released():
 	if is_instance_valid(car_node) and car_node.has_method("trigger_horn"):
 		car_node.trigger_horn(false)
+
+func _on_nitro_pressed():
+	is_nitro_held = true
+	if is_instance_valid(car_node) and car_node.has_method("trigger_nitro"):
+		car_node.trigger_nitro(true)
+
+func _on_nitro_released():
+	is_nitro_held = false
+	if is_instance_valid(car_node) and car_node.has_method("trigger_nitro"):
+		car_node.trigger_nitro(false)
 
 # --- TOUCH CONTROLS SIMULATION ---
 func _on_left_pressed():

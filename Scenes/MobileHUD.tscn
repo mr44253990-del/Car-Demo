@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c7v7g2px3r7lm"]
+[gd_scene load_steps=6 format=3 uid="uid://c7v7g2px3r7lm"]
 
 [ext_resource type="Script" path="res://Scripts/MobileHUD.gd" id="1_mobilehud"]
 
@@ -25,6 +25,13 @@ corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_dmg"]
 bg_color = Color(0.95, 0.25, 0.25, 0.75)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_nitro"]
+bg_color = Color(0.0, 0.8, 1.0, 0.8)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -104,12 +111,12 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -330.0
+offset_left = -480.0
 offset_top = 30.0
-offset_right = 330.0
+offset_right = 480.0
 offset_bottom = 80.0
 grow_horizontal = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 20
 
 [node name="FuelBar" type="ProgressBar" parent="MainContainer/StatsContainer"]
 custom_minimum_size = Vector2(300, 40)
@@ -149,6 +156,25 @@ text = "DAMAGE: 0%"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="NitroBar" type="ProgressBar" parent="MainContainer/StatsContainer"]
+custom_minimum_size = Vector2(300, 40)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_progress_nitro")
+value = 100.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MainContainer/StatsContainer/NitroBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 22
+text = "NITRO: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="MissionStatusLabel" type="Label" parent="MainContainer"]
 layout_mode = 1
 anchors_preset = 5
@@ -164,6 +190,22 @@ theme_override_font_sizes/font_size = 26
 text = "Loading Mission..."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="DriftLabel" type="Label" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 160.0
+offset_right = 400.0
+offset_bottom = 260.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 36
+text = "DRIFT: 0 PTS"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="RefuelPromptBtn" type="Button" parent="MainContainer"]
 visible = false
@@ -254,7 +296,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -660.0
+offset_left = -780.0
 offset_top = -250.0
 offset_right = -50.0
 offset_bottom = -50.0
@@ -270,6 +312,15 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 24
 text = "HORN
 📯"
+
+[node name="NitroBtn" type="Button" parent="MainContainer/ActionControls"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "NITRO
+⚡"
 
 [node name="DriftBtn" type="Button" parent="MainContainer/ActionControls"]
 custom_minimum_size = Vector2(130, 130)
@@ -502,6 +553,8 @@ text = "CLOSE ❌"
 [connection signal="button_up" from="MainContainer/SteeringControls/RightBtn" to="." method="_on_right_released"]
 [connection signal="button_down" from="MainContainer/ActionControls/GearBtn" to="." method="_on_horn_pressed"]
 [connection signal="button_up" from="MainContainer/ActionControls/GearBtn" to="." method="_on_horn_released"]
+[connection signal="button_down" from="MainContainer/ActionControls/NitroBtn" to="." method="_on_nitro_pressed"]
+[connection signal="button_up" from="MainContainer/ActionControls/NitroBtn" to="." method="_on_nitro_released"]
 [connection signal="button_down" from="MainContainer/ActionControls/DriftBtn" to="." method="_on_drift_pressed"]
 [connection signal="button_up" from="MainContainer/ActionControls/DriftBtn" to="." method="_on_drift_released"]
 [connection signal="button_down" from="MainContainer/ActionControls/BrakeBtn" to="." method="_on_backward_pressed"]

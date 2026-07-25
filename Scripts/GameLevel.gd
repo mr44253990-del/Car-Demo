@@ -375,7 +375,7 @@ func _setup_rain_system():
 	var mat = StandardMaterial3D.new()
 	mat.albedo_color = Color(0.4, 0.6, 0.95, 0.45)
 	mat.transparency = StandardMaterial3D.TRANSPARENCY_ALPHA
-	cyl.material = m
+	cyl.material = mat
 	rain_particles.mesh = cyl
 	
 	# Rain emitter area
