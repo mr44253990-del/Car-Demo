@@ -12,8 +12,8 @@ var active_paint_color: Color = Color.WHITE
 var has_custom_paint: bool = false
 
 # --- Dynamic Day-Night & Weather Cycle ---
-var time_of_day: float = 8.0 # Starts at 8:00 AM
-var day_speed: float = 0.15 # speed of the sun cycle
+var time_of_day: float = 8.0
+var day_speed: float = 0.15
 var directional_light: DirectionalLight3D = null
 var world_environment: WorldEnvironment = null
 
@@ -21,15 +21,19 @@ var current_weather: String = "sunny"
 var weather_timer: float = 0.0
 var rain_particles: CPUParticles3D = null
 
-# --- AI Pedestrian Characters ---
+# --- AI Pedestrians & Traffic ---
 var ai_citizens: Array = []
+var ai_traffic_cars: Array = []
 var houses_nodes: Array = []
 var light_poles_nodes: Array = []
+
+# --- Speed Trap & Stunt Rings ---
+var speed_trap_light: PointLight3D = null
+var speed_trap_active: bool = true
 
 func _ready():
 	get_tree().paused = false
 	
-	# Find Sun and Environment
 	directional_light = get_node_or_null("DirectionalLight3D")
 	world_environment = get_node_or_null("WorldEnvironment")
 	
@@ -44,21 +48,32 @@ func _ready():
 	# Procedurally Generate Giant Map
 	_generate_horizon_map()
 	_spawn_fuel_stations()
+	_spawn_speed_trap()
+	_spawn_aerial_stunt_rings()
 	
 	# Setup Rain Particles
 	_setup_rain_system()
 	
-	# Spawn AI Pedestrians
+	# Spawn AI Pedestrians & Traffic
 	_spawn_ai_citizens()
+	_spawn_ai_traffic()
 	
-	# Spawner multiplayer / local car
+	# Setup Local Player Car
 	if GameManager.is_multiplayer:
 		setup_multiplayer_game()
 	else:
 		if is_instance_valid(default_car):
 			default_car.add_to_group("player_car")
+			
+			# Apply persistent tuning upgrades
+			_apply_performance_upgrades(default_car)
+			
 			if has_custom_paint:
 				_apply_car_paint(default_car, active_paint_color)
+				
+			# Apply persistent Underglow
+			_apply_car_underglow(default_car, GameManager.underglow_color)
+			
 			_attach_rain_to_car(default_car)
 
 func _load_custom_paint():
@@ -90,6 +105,36 @@ func _apply_paint_recursive(node: Node, color: Color):
 			
 	for child in node.get_children():
 		_apply_paint_recursive(child, color)
+
+# --- APPLY PERFORMANCE UPGRADES ---
+func _apply_performance_upgrades(car_node: BaseCar):
+	# Level 1-5 Engine Upgrades (up to +45% acceleration)
+	var speed_boost = 1.0 + (float(GameManager.upgrade_engine - 1) * 0.11)
+	car_node.engine_force_value = int(car_node.engine_force_value * speed_boost)
+	
+	# Level 1-5 Handling Upgrades (up to +28% steering agility)
+	var turn_boost = 1.0 + (float(GameManager.upgrade_handling - 1) * 0.07)
+	car_node.STEER_SPEED = car_node.STEER_SPEED * turn_boost
+	
+	print("Tuning applied! Max Engine force: ", car_node.engine_force_value, " Steer Speed: ", car_node.STEER_SPEED)
+
+# --- APPLY NEON UNDERGLOW TUBE ---
+func _apply_car_underglow(car_node: Node, color_name: String):
+	var glow = OmniLight3D.new()
+	glow.name = "UnderglowLight"
+	car_node.add_child(glow)
+	glow.transform.origin = Vector3(0, -0.3, 0) # place underneath
+	glow.light_energy = 8.0
+	glow.omni_range = 3.5
+	
+	var color = Color(0, 0.85, 1) # cyan default
+	match color_name:
+		"cyan": color = Color(0, 0.85, 1)
+		"pink": color = Color(1, 0, 0.45) # neon pink
+		"gold": color = Color(1, 0.85, 0.2)
+		"red": color = Color(1, 0.15, 0.15)
+		
+	glow.light_color = color
 
 # --- PROCEDURAL MAP GENERATION ---
 func _generate_horizon_map():
@@ -164,7 +209,7 @@ func _generate_horizon_map():
 		mesh_inst.mesh = box_mesh
 		hill.add_child(mesh_inst)
 
-	# Spawn Skyscrapers / Central Towers
+	# Spawn Central Skyscrapers
 	var towers = [
 		{"pos": Vector3(80, 15, 0), "size": Vector3(12, 30, 12), "col": Color(0.1, 0.1, 0.15)},
 		{"pos": Vector3(-80, 20, 0), "size": Vector3(15, 40, 15), "col": Color(0.12, 0.12, 0.18)},
@@ -193,7 +238,7 @@ func _generate_horizon_map():
 		mesh_inst.mesh = box_mesh
 		tower.add_child(mesh_inst)
 
-	# Spawn 18+ Colorful Houses (Village)
+	# Spawn 18+ Houses
 	var house_positions = [
 		Vector3(-15, 0, -20), Vector3(-15, 0, -10), Vector3(15, 0, -20), Vector3(15, 0, -10),
 		Vector3(45, 0, 15), Vector3(45, 0, 45), Vector3(35, 0, 15), Vector3(35, 0, 45),
@@ -224,7 +269,7 @@ func _generate_horizon_map():
 		mesh_base.mesh = box_base
 		house.add_child(mesh_base)
 		
-		# Glowing windows (Windows light up at night!)
+		# Windows
 		var window_mesh = MeshInstance3D.new()
 		var w_mesh = BoxMesh.new()
 		w_mesh.size = Vector3(6.05, 1.2, 3.2)
@@ -246,7 +291,7 @@ func _generate_horizon_map():
 		roof.transform.origin = Vector3(0, 3.4, 0)
 		house.add_child(roof)
 
-	# Spawn Streetlights at intersections
+	# Spawn Streetlights
 	var light_positions = [
 		Vector3(12, 0, 12), Vector3(-12, 0, -12),
 		Vector3(12, 0, -35), Vector3(-12, 0, 35)
@@ -267,7 +312,7 @@ func _generate_horizon_map():
 		pole.add_child(mesh)
 		
 		var bulb = OmniLight3D.new()
-		bulb.light_color = Color(1.0, 0.95, 0.7) # Warm yellow light
+		bulb.light_color = Color(1.0, 0.95, 0.7)
 		bulb.light_energy = 5.0
 		bulb.omni_range = 15.0
 		bulb.visible = false
@@ -356,6 +401,132 @@ func _generate_horizon_map():
 		mesh_inst.mesh = beach_ball_mesh if is_ball else prop_mesh
 		prop.add_child(mesh_inst)
 
+# --- SPEED TRAP SYSTEM ---
+func _spawn_speed_trap():
+	# Create a Speed Trap post next to Central Avenue
+	var trap = Area3D.new()
+	add_child(trap)
+	trap.global_transform.origin = Vector3(0, 1.0, -25)
+	trap.collision_mask = 1
+	
+	var col = CollisionShape3D.new()
+	var shape = BoxShape3D.new()
+	shape.size = Vector3(8, 4, 3)
+	col.shape = shape
+	trap.add_child(col)
+	
+	# Speed Trap visual post
+	var post = MeshInstance3D.new()
+	var box = BoxMesh.new()
+	box.size = Vector3(0.3, 4.0, 0.3)
+	var m = StandardMaterial3D.new()
+	m.albedo_color = Color(1.0, 0.6, 0.0) # Speed orange
+	box.material = m
+	post.mesh = box
+	post.transform.origin = Vector3(4.5, 1.0, 0)
+	trap.add_child(post)
+	
+	# Glowing flash light
+	speed_trap_light = PointLight3D.new()
+	speed_trap_light.light_color = Color.WHITE
+	speed_trap_light.light_energy = 0.0
+	speed_trap_light.omni_range = 10.0
+	speed_trap_light.transform.origin = Vector3(0, 3.5, 0)
+	trap.add_child(speed_trap_light)
+	
+	# Signal connect
+	trap.body_entered.connect(_on_speed_trap_entered)
+
+func _on_speed_trap_entered(body):
+	if not speed_trap_active:
+		return
+		
+	if body is VehicleBody3D or body.is_in_group("player_car"):
+		var speed_kmh = round(body.linear_velocity.length() * 3.6)
+		if speed_kmh >= 80.0:
+			speed_trap_active = false
+			
+			# Flash speed camera
+			speed_trap_light.light_energy = 15.0
+			var tween = create_tween()
+			tween.tween_property(speed_trap_light, "light_energy", 0.0, 0.3)
+			
+			# Award speed bonus!
+			GameManager.coins += 50
+			GameManager.save_game_settings()
+			
+			# Notify HUD to display Speed Trap message
+			var hud = get_tree().get_first_node_in_group("mobile_hud")
+			if hud and hud.has_node("DriftLabel"):
+				var dl = hud.get_node("DriftLabel")
+				dl.visible = true
+				dl.text = "⚡ SPEED TRAP FLASHED!\n" + str(speed_kmh) + " KMPH! +50 Coins 🪙"
+				dl.add_theme_color_override("font_color", Color.YELLOW)
+				get_tree().create_timer(3.0).timeout.connect(func(): dl.visible = false)
+				
+			# Reactivate speed trap after 10 seconds
+			await get_tree().create_timer(10.0).timeout
+			speed_trap_active = true
+
+# --- AERIAL STUNT NEON RINGS ---
+func _spawn_aerial_stunt_rings():
+	var ring_coords = [
+		{"pos": Vector3(0, 4.2, 45), "rot": Vector3(0, 0, 90)}, # Above first ramp
+		{"pos": Vector3(0, 4.6, -45), "rot": Vector3(0, 0, 90)} # Above second ramp
+	]
+	
+	for r in ring_coords:
+		var ring = Area3D.new()
+		add_child(ring)
+		ring.global_transform.origin = r["pos"]
+		ring.rotation_degrees = r["rot"]
+		ring.collision_mask = 1
+		
+		# Torus shape collision / sensor
+		var col = CollisionShape3D.new()
+		var s = SphereShape3D.new()
+		s.radius = 2.5
+		col.shape = s
+		ring.add_child(col)
+		
+		# Torus representation (using CylinderMesh rotated or Tube)
+		var visual = MeshInstance3D.new()
+		var cyl = CylinderMesh.new()
+		cyl.top_radius = 2.5
+		cyl.bottom_radius = 2.45
+		cyl.height = 0.2
+		
+		var m = StandardMaterial3D.new()
+		m.albedo_color = Color(0, 0.85, 1) # Glowing Electric Cyan
+		m.emission_enabled = true
+		m.emission = Color(0, 0.85, 1, 2.0) # High neon glow
+		cyl.material = m
+		visual.mesh = cyl
+		ring.add_child(visual)
+		
+		ring.body_entered.connect(_on_stunt_ring_entered.bind(ring))
+
+func _on_stunt_ring_entered(body, ring_node: Node3D):
+	if body is VehicleBody3D or body.is_in_group("player_car"):
+		# Trigger explosion of color / hide ring
+		ring_node.visible = false
+		
+		# Award coins
+		GameManager.coins += 100
+		GameManager.save_game_settings()
+		
+		var hud = get_tree().get_first_node_in_group("mobile_hud")
+		if hud and hud.has_node("DriftLabel"):
+			var dl = hud.get_node("DriftLabel")
+			dl.visible = true
+			dl.text = "🔥 AERIAL STUNT CLEAR!\nJump Ring Bonus! +100 Coins 🪙"
+			dl.add_theme_color_override("font_color", Color(1, 0, 0.45))
+			get_tree().create_timer(3.0).timeout.connect(func(): dl.visible = false)
+			
+		# Respawn ring after 15 seconds
+		await get_tree().create_timer(15.0).timeout
+		ring_node.visible = true
+
 # --- DYNAMIC WEATHER & RAIN SYSTEMS ---
 func _setup_rain_system():
 	rain_particles = CPUParticles3D.new()
@@ -367,18 +538,17 @@ func _setup_rain_system():
 	rain_particles.initial_velocity_min = 18.0
 	rain_particles.initial_velocity_max = 28.0
 	
-	# Raindrop Mesh (long thin blue cylinders)
 	var cyl = CylinderMesh.new()
 	cyl.top_radius = 0.02
 	cyl.bottom_radius = 0.02
 	cyl.height = 1.2
+	
 	var mat = StandardMaterial3D.new()
 	mat.albedo_color = Color(0.4, 0.6, 0.95, 0.45)
 	mat.transparency = StandardMaterial3D.TRANSPARENCY_ALPHA
 	cyl.material = mat
 	rain_particles.mesh = cyl
 	
-	# Rain emitter area
 	rain_particles.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
 	rain_particles.emission_box_extents = Vector3(25, 1, 25)
 	
@@ -386,9 +556,8 @@ func _setup_rain_system():
 
 func _attach_rain_to_car(car_node: Node):
 	if is_instance_valid(rain_particles) and is_instance_valid(car_node):
-		# Re-parent rain particles so they always hover and rain directly over the car!
 		rain_particles.reparent(car_node)
-		rain_particles.transform.origin = Vector3(0, 15, 0) # 15 units above car
+		rain_particles.transform.origin = Vector3(0, 15, 0)
 
 # --- AI PEDESTRIANS SIMULATOR ---
 func _spawn_ai_citizens():
@@ -404,80 +573,106 @@ func _spawn_ai_citizens():
 		citizen.global_transform.origin = ai_spawn_spots[i]
 		ai_citizens.append(citizen)
 		
-		# Human head
 		var head = MeshInstance3D.new()
 		var sph = SphereMesh.new()
 		sph.radius = 0.25
 		sph.height = 0.5
 		var m_head = StandardMaterial3D.new()
-		m_head.albedo_color = Color(0.85, 0.65, 0.5) # skin tone
+		m_head.albedo_color = Color(0.85, 0.65, 0.5)
 		sph.material = m_head
 		head.mesh = sph
 		head.transform.origin = Vector3(0, 1.6, 0)
 		citizen.add_child(head)
 		
-		# Human Body (colorful clothes)
 		var body = MeshInstance3D.new()
 		var cyl = CylinderMesh.new()
 		cyl.top_radius = 0.3
 		cyl.bottom_radius = 0.3
 		cyl.height = 1.1
 		var m_body = StandardMaterial3D.new()
-		m_body.albedo_color = Color(randf(), randf(), randf()) # colorful shirt
+		m_body.albedo_color = Color(randf(), randf(), randf())
 		cyl.material = m_body
 		body.mesh = cyl
 		body.transform.origin = Vector3(0, 0.8, 0)
 		citizen.add_child(body)
 		
-		# Store movement variables
 		citizen.set_meta("start_pos", ai_spawn_spots[i])
 		citizen.set_meta("walk_dir", Vector3(randf_range(-1.0, 1.0), 0, randf_range(-1.0, 1.0)).normalized())
 		citizen.set_meta("walk_dist", randf_range(8.0, 18.0))
 
+# --- AI TRAFFIC CARS ---
+func _spawn_ai_traffic():
+	var traffic_spawn_pos = [
+		Vector3(0, 0.5, -50),
+		Vector3(40, 0.5, 30)
+	]
+	
+	for i in range(traffic_spawn_pos.size()):
+		var tc = CharacterBody3D.new()
+		add_child(tc)
+		tc.global_transform.origin = traffic_spawn_pos[i]
+		ai_traffic_cars.append(tc)
+		
+		# Simple colored box mesh for traffic cars
+		var body = MeshInstance3D.new()
+		var box = BoxMesh.new()
+		box.size = Vector3(1.8, 1.2, 3.6)
+		var mat = StandardMaterial3D.new()
+		mat.albedo_color = Color(0.3, 0.3, 0.35) # solid grey traffic car
+		box.material = mat
+		body.mesh = box
+		body.transform.origin = Vector3(0, 0.6, 0)
+		tc.add_child(body)
+		
+		# Collision shape
+		var col = CollisionShape3D.new()
+		var shape = BoxShape3D.new()
+		shape.size = box.size
+		col.shape = shape
+		tc.add_child(col)
+		
+		# Traffic settings
+		tc.set_meta("speed", 6.0)
+		tc.set_meta("dir", Vector3(0, 0, 1) if i == 0 else Vector3(-1, 0, 0))
+
 func _physics_process(delta):
-	# --- 1. Day-Night Cycle Loop ---
 	time_of_day = fmod(time_of_day + day_speed * delta, 24.0)
 	_update_day_night_lighting()
 	
-	# --- 2. Dynamic Weather Cycle ---
 	weather_timer += delta
-	if weather_timer >= 45.0: # Change weather every 45 seconds
+	if weather_timer >= 45.0:
 		weather_timer = 0.0
 		_change_weather()
 		
-	# --- 3. AI Pedestrians Patrol ---
 	_process_ai_patrol(delta)
+	_process_traffic_patrol(delta)
 
 func _update_day_night_lighting():
 	var is_night = time_of_day > 18.5 or time_of_day < 5.5
 	
-	# Rotate the sun light (directional light)
 	if is_instance_valid(directional_light):
-		# Map hours (0-24) to 360 degree rotation
 		var angle = (time_of_day / 24.0) * 360.0
 		directional_light.rotation_degrees.x = angle - 90.0
 		
-		# Light Energy fades at night
 		if is_night:
 			directional_light.light_energy = move_toward(directional_light.light_energy, 0.0, 0.35)
 		else:
 			directional_light.light_energy = move_toward(directional_light.light_energy, 1.2, 0.35)
 			
-	# Turn streetlights and house lights ON/OFF based on night status
 	for pole in light_poles_nodes:
-		var bulb = pole.get_child(1) # Bulb OmniLight3D
+		var bulb = pole.get_child(1)
 		if bulb:
 			bulb.visible = is_night
 			
 	for house in houses_nodes:
-		var window = house.get_child(2) # Window mesh
+		var window = house.get_child(2)
 		if window:
 			var mat = window.material_override
 			if not mat:
 				mat = StandardMaterial3D.new()
 				window.material_override = mat
 			if is_night:
-				mat.albedo_color = Color(1.0, 0.9, 0.4) # bright yellow glow
+				mat.albedo_color = Color(1.0, 0.9, 0.4)
 				mat.emission_enabled = true
 				mat.emission = Color(1.0, 0.9, 0.4, 1.0)
 			else:
@@ -488,12 +683,15 @@ func _change_weather():
 	var rand = randi() % 3
 	if rand == 0:
 		current_weather = "sunny"
+		GameManager.current_weather = "sunny"
 		if rain_particles: rain_particles.emitting = false
 	elif rand == 1:
 		current_weather = "cloudy"
+		GameManager.current_weather = "cloudy"
 		if rain_particles: rain_particles.emitting = false
 	else:
 		current_weather = "rainy"
+		GameManager.current_weather = "rainy"
 		if rain_particles: rain_particles.emitting = true
 
 func _process_ai_patrol(delta):
@@ -504,26 +702,41 @@ func _process_ai_patrol(delta):
 			continue
 			
 		if is_night:
-			# Night Mode: walk towards nearest house and disappear (go indoors!)
 			citizen.visible = false
 		else:
-			# Day Mode: walk around on active patrol
 			citizen.visible = true
 			var start = citizen.get_meta("start_pos")
 			var dir = citizen.get_meta("walk_dir")
 			var dist = citizen.get_meta("walk_dist")
 			
-			# Walk forward
 			citizen.global_transform.origin += dir * 1.5 * delta
 			
-			# Check distance from start
 			var current_dist = citizen.global_transform.origin.distance_to(start)
 			if current_dist >= dist:
-				# Turn around/choose random new direction
 				var new_dir = -dir + Vector3(randf_range(-0.5, 0.5), 0, randf_range(-0.5, 0.5))
 				new_dir = new_dir.normalized()
 				citizen.set_meta("walk_dir", new_dir)
 				citizen.set_meta("start_pos", citizen.global_transform.origin)
+
+func _process_traffic_patrol(delta):
+	# Guide AI Traffic vehicles smoothly along the streets
+	for tc in ai_traffic_cars:
+		if not is_instance_valid(tc):
+			continue
+			
+		var speed_val = tc.get_meta("speed")
+		var dir = tc.get_meta("dir")
+		
+		# Simple movement
+		tc.velocity = dir * speed_val
+		tc.move_and_slide()
+		
+		# Reset path bounds at boundaries
+		var p = tc.global_transform.origin
+		if abs(p.z) > 85.0:
+			tc.set_meta("dir", -dir)
+		if abs(p.x) > 85.0:
+			tc.set_meta("dir", -dir)
 
 func _spawn_fuel_stations():
 	var station_positions = [
@@ -570,7 +783,12 @@ func spawn_player_car(peer_id: int) -> BaseCar:
 	var spawn_offset = Vector3(float(peer_id % 3) * 3.0, 0.5, float(peer_id % 2) * 3.0)
 	new_car.global_transform.origin = Vector3(5, 0.5, 4) + spawn_offset
 	
+	# Apply upgrades to multiplayer car
+	_apply_performance_upgrades(new_car)
+	
 	if has_custom_paint:
 		_apply_car_paint(new_car, active_paint_color)
+		
+	_apply_car_underglow(new_car, GameManager.underglow_color)
 		
 	return new_car

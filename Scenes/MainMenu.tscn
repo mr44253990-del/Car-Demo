@@ -16,7 +16,7 @@ border_width_left = 6
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 0, 0.45, 1) # Forza pink border accent
+border_color = Color(1, 0, 0.45, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 24
 corner_radius_bottom_right = 4
@@ -30,7 +30,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 6
 border_width_bottom = 1
-border_color = Color(1, 0.4, 0, 1) # Forza Orange/Yellow accent
+border_color = Color(1, 0.4, 0, 1)
 corner_radius_top_left = 24
 corner_radius_top_right = 4
 corner_radius_bottom_right = 24
@@ -286,141 +286,225 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_content_panel")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 40.0
-offset_bottom = 90.0
+offset_top = 20.0
+offset_bottom = 60.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.4, 0, 1)
-theme_override_font_sizes/font_size = 40
-text = "FESTIVAL PAINT & SHOP"
+theme_override_font_sizes/font_size = 32
+text = "FESTIVAL TUNING & LIVERY"
 horizontal_alignment = 1
 
 [node name="CarStatusLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -190.0
-offset_bottom = -140.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 32
+offset_left = 30.0
+offset_top = 80.0
+offset_right = 430.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 24
 text = "Status: Perfect"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DamageLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -120.0
-offset_bottom = -70.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 30.0
+offset_top = 130.0
+offset_right = 430.0
+offset_bottom = 170.0
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "Vehicle Damage: 0%"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="RepairCostLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -50.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 30.0
+offset_top = 180.0
+offset_right = 530.0
+offset_bottom = 220.0
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "Repair Cost: 0 Coins"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="RepairButton" type="Button" parent="MainLayout/ContentArea/GaragePanel"]
-custom_minimum_size = Vector2(420, 90)
+custom_minimum_size = Vector2(300, 65)
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -210.0
-offset_top = -250.0
-offset_right = 210.0
-offset_bottom = -160.0
-grow_horizontal = 2
-grow_vertical = 0
+offset_left = 30.0
+offset_top = 230.0
+offset_right = 330.0
+offset_bottom = 295.0
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 34
-text = "REPAIR VEHICLE 🛠️"
+theme_override_font_sizes/font_size = 24
+text = "REPAIR VEHICLE 🛠"
 
-[node name="PaintLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
+[node name="UpgradesLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -140.0
-offset_right = 300.0
-offset_top = -100.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+offset_left = 480.0
+offset_top = 80.0
+offset_right = 880.0
+offset_bottom = 115.0
+theme_override_colors/font_color = Color(0.0, 0.85, 1.0, 1)
 theme_override_font_sizes/font_size = 26
-text = "Livery Paint (Cost: 50 🪙):"
-horizontal_alignment = 1
+text = "Performance Upgrades (Max 5)"
+
+[node name="UpgradesContainer" type="VBoxContainer" parent="MainLayout/ContentArea/GaragePanel"]
+layout_mode = 1
+offset_left = 480.0
+offset_top = 130.0
+offset_right = 880.0
+offset_bottom = 430.0
+theme_override_constants/separation = 15
+
+[node name="EngineUp" type="HBoxContainer" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer/EngineUp"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Engine (Lvl 1/5)"
 vertical_alignment = 1
 
-[node name="PaintColors" type="HBoxContainer" parent="MainLayout/ContentArea/GaragePanel"]
+[node name="Btn" type="Button" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer/EngineUp"]
+custom_minimum_size = Vector2(140, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "UPGRADE ⚡"
+
+[node name="HandlingUp" type="HBoxContainer" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer/HandlingUp"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Handling (Lvl 1/5)"
+vertical_alignment = 1
+
+[node name="Btn" type="Button" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer/HandlingUp"]
+custom_minimum_size = Vector2(140, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "UPGRADE ⚡"
+
+[node name="BrakesUp" type="HBoxContainer" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer/BrakesUp"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Brakes (Lvl 1/5)"
+vertical_alignment = 1
+
+[node name="Btn" type="Button" parent="MainLayout/ContentArea/GaragePanel/UpgradesContainer/BrakesUp"]
+custom_minimum_size = Vector2(140, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "UPGRADE ⚡"
+
+[node name="CustomizationContainer" type="HBoxContainer" parent="MainLayout/ContentArea/GaragePanel"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 12
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -320.0
-offset_top = -90.0
-offset_right = 320.0
+offset_left = 30.0
+offset_top = -240.0
+offset_right = -30.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 20
-alignment = 1
+theme_override_constants/separation = 40
 
-[node name="Red" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
-custom_minimum_size = Vector2(140, 0)
+[node name="PaintBox" type="VBoxContainer" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0.45, 1)
+theme_override_font_sizes/font_size = 24
+text = "Body Livery Paint (50 🪙):"
+
+[node name="PaintColors" type="HBoxContainer" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Red" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors"]
+custom_minimum_size = Vector2(110, 65)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "RED 🔴"
 
-[node name="Blue" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
-custom_minimum_size = Vector2(140, 0)
+[node name="Blue" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors"]
+custom_minimum_size = Vector2(110, 65)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.6, 1, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "BLUE 🔵"
 
-[node name="Green" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
-custom_minimum_size = Vector2(140, 0)
+[node name="Green" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors"]
+custom_minimum_size = Vector2(110, 65)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 1, 0.5, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "GREEN 🟢"
 
-[node name="Gold" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
-custom_minimum_size = Vector2(140, 0)
+[node name="Gold" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors"]
+custom_minimum_size = Vector2(110, 65)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "GOLD 🟡"
+
+[node name="UnderglowBox" type="VBoxContainer" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Neon Underglow Tube (FREE):"
+
+[node name="GlowColors" type="HBoxContainer" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Cyan" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors"]
+custom_minimum_size = Vector2(110, 65)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "CYAN 💡"
+
+[node name="Pink" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors"]
+custom_minimum_size = Vector2(110, 65)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0.45, 1)
+theme_override_font_sizes/font_size = 20
+text = "PINK 💡"
+
+[node name="Gold" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors"]
+custom_minimum_size = Vector2(110, 65)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+text = "GOLD 💡"
+
+[node name="Red" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors"]
+custom_minimum_size = Vector2(110, 65)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+text = "RED 💡"
 
 [node name="MultiplayerPanel" type="Panel" parent="MainLayout/ContentArea"]
 visible = false
@@ -785,10 +869,17 @@ text = "CLAIM 200 COINS 🎁"
 [connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/MissionGrid/Mission3" to="." method="select_mission" binds= [2]]
 [connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/StartGameButton" to="." method="_on_start_game_pressed"]
 [connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/RepairButton" to="." method="_on_repair_button_pressed"]
-[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/PaintColors/Red" to="." method="_on_paint_car" binds= ["red"]]
-[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/PaintColors/Blue" to="." method="_on_paint_car" binds= ["blue"]]
-[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/PaintColors/Green" to="." method="_on_paint_car" binds= ["green"]]
-[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/PaintColors/Gold" to="." method="_on_paint_car" binds= ["gold"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/UpgradesContainer/EngineUp/Btn" to="." method="_on_upgrade_pressed" binds= ["engine"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/UpgradesContainer/HandlingUp/Btn" to="." method="_on_upgrade_pressed" binds= ["handling"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/UpgradesContainer/BrakesUp/Btn" to="." method="_on_upgrade_pressed" binds= ["brakes"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Red" to="." method="_on_paint_car" binds= ["red"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Blue" to="." method="_on_paint_car" binds= ["blue"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Green" to="." method="_on_paint_car" binds= ["green"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Gold" to="." method="_on_paint_car" binds= ["gold"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors/Cyan" to="." method="_on_underglow_color_pressed" binds= ["cyan"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors/Pink" to="." method="_on_underglow_color_pressed" binds= ["pink"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors/Gold" to="." method="_on_underglow_color_pressed" binds= ["gold"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors/Red" to="." method="_on_underglow_color_pressed" binds= ["red"]]
 [connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/Buttons/HostWifi" to="." method="_on_host_wifi_pressed"]
 [connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/Buttons/JoinRoom" to="." method="_on_join_room_pressed"]
 [connection signal="pressed" from="MainLayout/ContentArea/MultiplayerPanel/StartMpButton" to="." method="_on_start_multiplayer_game"]

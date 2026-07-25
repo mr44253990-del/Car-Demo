@@ -27,6 +27,10 @@ extends Control
 @onready var repair_cost_label = $MainLayout/ContentArea/GaragePanel/RepairCostLabel
 @onready var garage_car_status = $MainLayout/ContentArea/GaragePanel/CarStatusLabel
 
+@onready var engine_up_label = $MainLayout/ContentArea/GaragePanel/UpgradesContainer/EngineUp/Label
+@onready var handling_up_label = $MainLayout/ContentArea/GaragePanel/UpgradesContainer/HandlingUp/Label
+@onready var brakes_up_label = $MainLayout/ContentArea/GaragePanel/UpgradesContainer/BrakesUp/Label
+
 # Daily Panel labels
 @onready var daily_status_label = $MainLayout/ContentArea/DailyPanel/DailyStatusLabel
 
@@ -58,7 +62,6 @@ func _ready():
 	if not multiplayer.server_disconnected.is_connected(_on_server_disconnected):
 		multiplayer.server_disconnected.connect(_on_server_disconnected)
 	
-	# Cache panel original positions for slide transitions
 	_cache_panel_positions()
 	
 	update_global_ui()
@@ -80,18 +83,16 @@ func update_global_ui():
 
 # --- SLIDING PANEL TRANSITIONS (Forza Horizon Style) ---
 func show_panel(target_panel: Panel):
-	# Hide all panels
 	var panels = [play_panel, garage_panel, settings_panel, multiplayer_panel, daily_panel]
 	for p in panels:
 		p.visible = false
 		p.modulate.a = 0.0
 	
-	# Reset target position and animate slide + fade-in
 	target_panel.visible = true
 	target_panel.modulate.a = 0.0
 	
 	var orig_pos = panel_positions.get(target_panel.name, target_panel.position)
-	target_panel.position = orig_pos + Vector2(60, 0) # offset slightly to the right
+	target_panel.position = orig_pos + Vector2(60, 0)
 	
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
@@ -166,7 +167,7 @@ func _on_start_game_pressed():
 	GameManager.is_multiplayer = false
 	GameManager.transition_to_scene("res://main.tscn")
 
-# --- GARAGE SYSTEM ---
+# --- GARAGE SYSTEM (TUNING & LIVERY) ---
 func update_garage_ui():
 	var damage = GameManager.car_damage
 	damage_label.text = "Car Damage: " + str(round(damage)) + "%"
@@ -182,6 +183,15 @@ func update_garage_ui():
 	else:
 		garage_car_status.text = "Status: Heavily Damaged! Repair immediately."
 		garage_car_status.add_theme_color_override("font_color", Color.RED)
+		
+	# Update Tuning Labels & Upgrade Prices
+	var cost_engine = GameManager.upgrade_engine * 150
+	var cost_handling = GameManager.upgrade_handling * 150
+	var cost_brakes = GameManager.upgrade_brakes * 150
+	
+	engine_up_label.text = "Engine (Lvl " + str(GameManager.upgrade_engine) + "/5)\nCost: " + (str(cost_engine) if GameManager.upgrade_engine < 5 else "MAX") + " 🪙"
+	handling_up_label.text = "Handling (Lvl " + str(GameManager.upgrade_handling) + "/5)\nCost: " + (str(cost_handling) if GameManager.upgrade_handling < 5 else "MAX") + " 🪙"
+	brakes_up_label.text = "Brakes (Lvl " + str(GameManager.upgrade_brakes) + "/5)\nCost: " + (str(cost_brakes) if GameManager.upgrade_brakes < 5 else "MAX") + " 🪙"
 
 func _on_repair_button_pressed():
 	var cost = int(GameManager.car_damage * 5)
@@ -195,6 +205,29 @@ func _on_repair_button_pressed():
 		update_garage_ui()
 	else:
 		repair_cost_label.text = "NOT ENOUGH COINS! Need " + str(cost) + " Coins"
+
+func _on_upgrade_pressed(type: String):
+	var current_lvl = 1
+	if type == "engine": current_lvl = GameManager.upgrade_engine
+	elif type == "handling": current_lvl = GameManager.upgrade_handling
+	elif type == "brakes": current_lvl = GameManager.upgrade_brakes
+	
+	if current_lvl >= 5:
+		repair_cost_label.text = "Tuning category is already at MAX level! 🏁"
+		return
+		
+	var cost = current_lvl * 150
+	if GameManager.coins >= cost:
+		GameManager.coins -= cost
+		if type == "engine": GameManager.upgrade_engine += 1
+		elif type == "handling": GameManager.upgrade_handling += 1
+		elif type == "brakes": GameManager.upgrade_brakes += 1
+		
+		GameManager.save_game_settings()
+		update_global_ui()
+		repair_cost_label.text = "Upgraded " + type.to_upper() + " successfully! 🪙 -" + str(cost)
+	else:
+		repair_cost_label.text = "NOT ENOUGH COINS! Need " + str(cost) + " Coins 🪙"
 
 func _on_paint_car(color_name: String):
 	var paint_cost = 50
@@ -212,6 +245,11 @@ func _on_paint_car(color_name: String):
 		repair_cost_label.text = "Painted " + color_name.to_upper() + "! Cost: " + str(paint_cost) + " Coins"
 	else:
 		repair_cost_label.text = "NOT ENOUGH COINS! Paint cost: " + str(paint_cost) + " Coins"
+
+func _on_underglow_color_pressed(color_name: String):
+	GameManager.underglow_color = color_name
+	GameManager.save_game_settings()
+	repair_cost_label.text = "Underglow changed to " + color_name.to_upper() + "! 💡"
 
 # --- PERSISTENT DAILY REWARD CENTER ---
 func update_daily_status_ui():

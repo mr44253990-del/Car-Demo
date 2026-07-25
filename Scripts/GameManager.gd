@@ -8,6 +8,14 @@ var selected_mission_id: int = 0 # 0: Free Roam, 1: Coin Rush, 2: Fuel Survivor
 # --- Daily Check-In persistent save ---
 var last_claim_date: String = ""
 
+# --- Performance Upgrades (Persistent, Max 5 levels each) ---
+var upgrade_engine: int = 1
+var upgrade_handling: int = 1
+var upgrade_brakes: int = 1
+
+# --- Underglow Color Choice (Persistent) ---
+var underglow_color: String = "cyan" # cyan, pink, gold, red
+
 # --- Car State ---
 var car_fuel: float = 100.0
 var car_max_fuel: float = 100.0
@@ -23,6 +31,9 @@ var graphics_preset: int = 1 # 0: Low, 1: Medium, 2: High
 var render_distance: float = 250.0
 var resolution_scale: float = 1.0
 var texture_quality: int = 1
+
+# --- Current Active Weather in Level ---
+var current_weather: String = "sunny" # updated dynamically by GameLevel
 
 # --- Multiplayer State ---
 var is_multiplayer: bool = false
@@ -42,6 +53,10 @@ func save_game_settings():
 	var save_data = {
 		"coins": coins,
 		"last_claim_date": last_claim_date,
+		"upgrade_engine": upgrade_engine,
+		"upgrade_handling": upgrade_handling,
+		"upgrade_brakes": upgrade_brakes,
+		"underglow_color": underglow_color,
 		"volume_master": volume_master,
 		"volume_music": volume_music,
 		"volume_sfx": volume_sfx,
@@ -63,6 +78,10 @@ func load_game_settings():
 			if save_data is Dictionary:
 				if save_data.has("coins"): coins = save_data["coins"]
 				if save_data.has("last_claim_date"): last_claim_date = save_data["last_claim_date"]
+				if save_data.has("upgrade_engine"): upgrade_engine = save_data["upgrade_engine"]
+				if save_data.has("upgrade_handling"): upgrade_handling = save_data["upgrade_handling"]
+				if save_data.has("upgrade_brakes"): upgrade_brakes = save_data["upgrade_brakes"]
+				if save_data.has("underglow_color"): underglow_color = save_data["underglow_color"]
 				if save_data.has("volume_master"): volume_master = save_data["volume_master"]
 				if save_data.has("volume_music"): volume_music = save_data["volume_music"]
 				if save_data.has("volume_sfx"): volume_sfx = save_data["volume_sfx"]
@@ -95,7 +114,7 @@ func apply_graphics_settings():
 			RenderingServer.directional_shadow_atlas_set_size(4096, true)
 			get_viewport().scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR2
 
-# --- DAILY REWARD SYSTEM (Saves directly to user phone storage) ---
+# --- DAILY REWARD SYSTEM ---
 func claim_daily_reward() -> Dictionary:
 	var today_date = Time.get_date_string_from_system()
 	

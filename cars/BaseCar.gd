@@ -36,6 +36,10 @@ var nitro_particles: CPUParticles3D = null
 var drift_points: float = 0.0
 var is_currently_drifting: bool = false
 
+# --- Tire Smoke & Dust trails ---
+var smoke_rear_l: CPUParticles3D = null
+var smoke_rear_r: CPUParticles3D = null
+
 # --- Damage, Particles & Crash Debris ---
 var smoke_particles: CPUParticles3D = null
 var previous_velocity: Vector3 = Vector3.ZERO
@@ -48,6 +52,7 @@ func _ready():
 	
 	_setup_lights()
 	_setup_nitro_system()
+	_setup_tire_smoke()
 	
 	if is_local_player():
 		GameManager.reset_car_state()
@@ -108,30 +113,57 @@ func _setup_lights():
 	brakelight_r.visible = false
 
 func _setup_nitro_system():
-	# Cyan Fire/Spark particle effects from rear exhaust on boost
 	nitro_particles = CPUParticles3D.new()
 	add_child(nitro_particles)
-	nitro_particles.transform.origin = Vector3(0.0, 0.3, 1.7) # exhaust pipe
+	nitro_particles.transform.origin = Vector3(0.0, 0.3, 1.7)
 	nitro_particles.emitting = false
 	nitro_particles.amount = 40
 	nitro_particles.lifetime = 0.6
 	
-	# Small glowing cyan sphere particle
 	nitro_particles.mesh = SphereMesh.new()
 	nitro_particles.mesh.radius = 0.08
 	nitro_particles.mesh.height = 0.16
 	
 	var mat = StandardMaterial3D.new()
-	mat.albedo_color = Color(0.0, 0.9, 1.0) # Electric cyan
+	mat.albedo_color = Color(0.0, 0.9, 1.0)
 	mat.emission_enabled = true
-	mat.emission = Color(0.0, 0.9, 1.0, 1.5) # Glowing fire
+	mat.emission = Color(0.0, 0.9, 1.0, 1.5)
 	nitro_particles.material_override = mat
 	
-	nitro_particles.direction = Vector3(0, 0, 1) # shoot backwards
+	nitro_particles.direction = Vector3(0, 0, 1)
 	nitro_particles.spread = 15.0
 	nitro_particles.gravity = Vector3(0, 1, 0)
 	nitro_particles.initial_velocity_min = 4.0
 	nitro_particles.initial_velocity_max = 8.0
+
+func _setup_tire_smoke():
+	# Smoke CPUParticles3D for rear wheels
+	smoke_rear_l = CPUParticles3D.new()
+	smoke_rear_r = CPUParticles3D.new()
+	add_child(smoke_rear_l)
+	add_child(smoke_rear_r)
+	
+	smoke_rear_l.transform.origin = Vector3(0.8, 0.1, 1.5) # behind rear left tire
+	smoke_rear_r.transform.origin = Vector3(-0.8, 0.1, 1.5) # behind rear right tire
+	
+	for sm in [smoke_rear_l, smoke_rear_r]:
+		sm.emitting = false
+		sm.amount = 35
+		sm.lifetime = 0.8
+		sm.mesh = SphereMesh.new()
+		sm.mesh.radius = 0.15
+		sm.mesh.height = 0.3
+		
+		var mat = StandardMaterial3D.new()
+		mat.albedo_color = Color(0.9, 0.9, 0.9, 0.45) # white drift smoke
+		mat.transparency = StandardMaterial3D.TRANSPARENCY_ALPHA
+		sm.material_override = mat
+		
+		sm.direction = Vector3(0, 0.5, 1)
+		sm.spread = 20.0
+		sm.gravity = Vector3(0, 1.5, 0)
+		sm.initial_velocity_min = 2.0
+		sm.initial_velocity_max = 5.0
 
 func _setup_smoke_particles():
 	smoke_particles = CPUParticles3D.new()
@@ -189,7 +221,6 @@ func _physics_process(delta):
 	
 	# --- Sound Synthesis ---
 	if sound_synth:
-		# Nitro speeds up pitch scale
 		var speed_factor = (speed / 45.0) * (1.5 if nitro_active else 1.0)
 		sound_synth.set_engine_pitch(speed_factor)
 		var is_skidding = Input.is_action_pressed("ui_select") and speed > 10.0
@@ -201,12 +232,11 @@ func _physics_process(delta):
 		brakelight_l.visible = is_braking
 		brakelight_r.visible = is_braking
 	
-	# --- Headlights and Keyboard Horn/Nitro Inputs ---
+	# --- Keyboard Nitro Inputs ---
 	if is_local_player():
-		if Input.is_action_pressed("ui_focus_next"): # Shift can act as Keyboard nitro
+		if Input.is_action_pressed("ui_focus_next"):
 			trigger_nitro(true)
 		else:
-			# Check keyboard release of nitro
 			if not Input.is_action_pressed("ui_focus_next") and not is_local_player_using_hud_nitro():
 				trigger_nitro(false)
 				
@@ -215,6 +245,9 @@ func _physics_process(delta):
 	
 	# --- Process Drift Score System ---
 	_process_drift_score(delta)
+	
+	# --- Process Tire Smoke & Dirt trails ---
+	_process_tire_smoke_trails()
 	
 	_process_fuel_consumption(delta)
 	_process_damage_effects()
@@ -238,10 +271,34 @@ func is_local_player_using_hud_nitro() -> bool:
 		return true
 	return false
 
+# --- TIRE SMOKE & DIRT TRAILS ---
+func _process_tire_smoke_trails():
+	if not is_local_player():
+		return
+		
+	var is_slide = Input.is_action_pressed("ui_select") or is_currently_drifting
+	var on_ground = speed > 5.0
+	
+	if is_instance_valid(smoke_rear_l) and is_instance_valid(smoke_rear_r):
+		if on_ground and is_slide:
+			smoke_rear_l.emitting = true
+			smoke_rear_r.emitting = true
+			
+			# Check offroad / dirt color mapping
+			if global_transform.origin.distance_to(Vector3.ZERO) > 40.0: # offroad outskirts
+				smoke_rear_l.material_override.albedo_color = Color(0.45, 0.35, 0.25, 0.5) # dirt color
+				smoke_rear_r.material_override.albedo_color = Color(0.45, 0.35, 0.25, 0.5)
+			else:
+				smoke_rear_l.material_override.albedo_color = Color(0.9, 0.9, 0.9, 0.45) # asphalt white smoke
+				smoke_rear_r.material_override.albedo_color = Color(0.9, 0.9, 0.9, 0.45)
+		else:
+			smoke_rear_l.emitting = false
+			smoke_rear_r.emitting = false
+
 # --- NITRO SYSTEM CORE ---
 func _process_nitro_system(delta):
 	if nitro_active:
-		nitro_fuel -= 22.0 * delta # drain fuel
+		nitro_fuel -= 22.0 * delta
 		if is_instance_valid(nitro_particles):
 			nitro_particles.emitting = true
 			
@@ -249,7 +306,7 @@ func _process_nitro_system(delta):
 			nitro_fuel = 0.0
 			nitro_active = false
 	else:
-		nitro_fuel += 8.0 * delta # regenerate slowly
+		nitro_fuel += 8.0 * delta
 		nitro_fuel = clamp(nitro_fuel, 0.0, nitro_max)
 		if is_instance_valid(nitro_particles):
 			nitro_particles.emitting = false
@@ -259,28 +316,23 @@ func _process_drift_score(delta):
 	if not is_local_player():
 		return
 		
-	# Sideways speed / slide calculation
 	var sideways_speed = abs(global_transform.basis.x.dot(linear_velocity))
 	
 	if sideways_speed > 2.8 and speed > 12.0:
 		is_currently_drifting = true
-		# Gain drift points proportional to sideways slide speed and current speed
 		drift_points += sideways_speed * 12.0 * delta
 		
-		# Notify HUD to display the current drift points
 		var hud = get_tree().get_first_node_in_group("mobile_hud")
 		if hud and hud.has_method("update_drift_score"):
 			hud.update_drift_score(round(drift_points), true)
 	else:
 		if is_currently_drifting:
 			is_currently_drifting = false
-			# Finalize drift score, award to account
 			var earned_coins = int(drift_points / 40.0)
 			if earned_coins > 0:
 				GameManager.coins += earned_coins
 				GameManager.save_game_settings()
 				
-			# Notify HUD that drift ended
 			var hud = get_tree().get_first_node_in_group("mobile_hud")
 			if hud and hud.has_method("update_drift_score"):
 				hud.update_drift_score(round(drift_points), false, earned_coins)
@@ -405,7 +457,6 @@ func process_accel(delta):
 	var damage_penalty = 1.0 - (GameManager.car_damage / 110.0)
 	damage_penalty = clamp(damage_penalty, 0.08, 1.0)
 	
-	# Apply massive Nitro boost multiplier!
 	var nitro_multiplier = 2.25 if nitro_active else 1.0
 	var adjusted_engine_force = engine_force_value * damage_penalty * nitro_multiplier
 
@@ -433,13 +484,20 @@ func process_steer(delta):
 	steering = move_toward(steering, steer_target, STEER_SPEED * delta)
 
 func process_brake(_delta):
+	# Slippery wet rain handling check!
+	var grip_slide = 1.8
+	var grip_normal = 2.9
+	if GameManager.current_weather == "rainy":
+		grip_slide = 1.1 # slidey!
+		grip_normal = 1.9 # lower wet grip!
+		
 	if Input.is_action_pressed("ui_select"):
 		brake = 0.8
-		$wheel_rear_left.wheel_friction_slip = 1.8
-		$wheel_rear_right.wheel_friction_slip = 1.8
+		$wheel_rear_left.wheel_friction_slip = grip_slide
+		$wheel_rear_right.wheel_friction_slip = grip_slide
 	else:
-		$wheel_rear_left.wheel_friction_slip = 2.9
-		$wheel_rear_right.wheel_friction_slip = 2.9
+		$wheel_rear_left.wheel_friction_slip = grip_normal
+		$wheel_rear_right.wheel_friction_slip = grip_normal
 
 func traction(speed):
 	apply_central_force(Vector3.DOWN * speed)
