@@ -1,15 +1,53 @@
-[gd_scene load_steps=7 format=3 uid="uid://cx404u2pxw71n"]
+[gd_scene load_steps=10 format=3 uid="uid://cx404u2pxw71n"]
 
 [ext_resource type="Script" path="res://Scripts/LoadingScreen.gd" id="1_load"]
 [ext_resource type="Texture2D" path="res://project_icon.png" id="2_icon"]
 
 [sub_resource type="Gradient" id="Gradient_loading"]
-colors = PackedColorArray(0.04, 0.04, 0.1, 1, 0.12, 0.08, 0.22, 1)
+colors = PackedColorArray(0.02, 0.02, 0.06, 1, 0.08, 0.05, 0.16, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_loading"]
 gradient = SubResource("Gradient_loading")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
+bg_color = Color(0.01, 0.01, 0.03, 0.85)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0.8, 1, 0.25)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
+bg_color = Color(0, 0.85, 1, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.3)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0.85, 1, 0.45)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_glass_panel"]
+bg_color = Color(0.05, 0.05, 0.12, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.8, 1, 0.2)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [sub_resource type="Animation" id="Animation_fade"]
 resource_name = "fade_out"
@@ -51,19 +89,32 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_loading")
 expand_mode = 1
 
-[node name="Title" type="Label" parent="."]
+[node name="CenterPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(1100, 750)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -450.0
-offset_top = -220.0
-offset_right = 450.0
-offset_bottom = -140.0
+offset_left = -550.0
+offset_top = -375.0
+offset_right = 550.0
+offset_bottom = 375.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_glass_panel")
+
+[node name="Title" type="Label" parent="CenterPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -450.0
+offset_top = 50.0
+offset_right = 450.0
+offset_bottom = 130.0
+grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
@@ -72,78 +123,82 @@ text = "CAR DEMO: PRO EDITION"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LoadingIcon" type="Control" parent="."]
+[node name="LoadingIcon" type="Control" parent="CenterPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_top = -40.0
+offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SpinningWheel" type="TextureRect" parent="LoadingIcon"]
-modulate = Color(0, 0.8, 1, 1)
+[node name="SpinningWheel" type="TextureRect" parent="CenterPanel/LoadingIcon"]
+modulate = Color(0, 0.85, 1, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -80.0
-offset_top = -80.0
-offset_right = 80.0
-offset_bottom = 80.0
+offset_left = -90.0
+offset_top = -90.0
+offset_right = 90.0
+offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(80, 80)
+pivot_offset = Vector2(90, 90)
 texture = ExtResource("2_icon")
 expand_mode = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 150.0
-offset_top = -180.0
-offset_right = -150.0
-offset_bottom = -140.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 22
-step = 1.0
-
-[node name="TipLabel" type="Label" parent="."]
+[node name="ProgressBar" type="ProgressBar" parent="CenterPanel"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 100.0
-offset_top = -260.0
+offset_top = -180.0
 offset_right = -100.0
-offset_bottom = -200.0
+offset_bottom = -135.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.85, 0.9, 1, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+theme_override_font_sizes/font_size = 24
+step = 1.0
+
+[node name="TipLabel" type="Label" parent="CenterPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = -270.0
+offset_right = -80.0
+offset_bottom = -210.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.85, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "Tip: Hold Space or touch Drift to slide around corners!"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="ProgressLabel" type="Label" parent="."]
+[node name="ProgressLabel" type="Label" parent="CenterPanel"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 100.0
-offset_top = -120.0
+offset_top = -110.0
 offset_right = -100.0
-offset_bottom = -70.0
+offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 28

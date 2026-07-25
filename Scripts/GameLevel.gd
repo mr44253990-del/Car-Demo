@@ -12,6 +12,9 @@ var active_paint_color: Color = Color.WHITE
 var has_custom_paint: bool = false
 
 func _ready():
+	# Ensure the game is fully unpaused on level load
+	get_tree().paused = false
+	
 	# 1. Hide legacy HUD if present
 	if has_node("Hud"):
 		get_node("Hud").visible = false

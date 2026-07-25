@@ -24,8 +24,13 @@ func _ready():
 	# Reset state if local
 	if is_local_player():
 		GameManager.reset_car_state()
-		if has_node("%CarResetter"):
-			%CarResetter.init()
+		
+		# Bulletproof initialization of legacy CarResetter if present in active level
+		var root_scene = get_tree().current_scene
+		if root_scene and root_scene.has_node("CarResetter"):
+			var resetter = root_scene.get_node("CarResetter")
+			if resetter.has_method("init"):
+				resetter.init()
 		
 		# Enable collision detection for damage
 		contact_monitor = true
@@ -66,10 +71,8 @@ func _physics_process(delta):
 	# Multiplayer synchronization
 	if GameManager.is_multiplayer:
 		if is_multiplayer_authority():
-			# Sync to others
 			sync_state.rpc(global_transform, linear_velocity, angular_velocity, gearshift)
 		else:
-			# If not local, physics are skipped (handled by sync)
 			return
 
 	speed = linear_velocity.length() * Engine.get_frames_per_second() * delta
@@ -87,11 +90,17 @@ func _physics_process(delta):
 	# --- Damage Smoke & Performance ---
 	_process_damage_effects()
 	
-	# --- Update old HUD if still in scene ---
-	if has_node("%Hud/speed") and %Hud/speed != null:
-		%Hud/speed.text = str(round(speed * 3.6)) + "  KMPH"
-	if has_node("%Hud/gearshift_label") and %Hud/gearshift_label != null:
-		%Hud/gearshift_label.text = "Gear: " + str(gearshift)
+	# --- Update old HUD safely (Bulletproof) ---
+	var root_scene = get_tree().current_scene
+	if root_scene:
+		var legacy_hud = root_scene.get_node_or_null("Hud")
+		if legacy_hud:
+			var s_label = legacy_hud.get_node_or_null("speed")
+			if s_label:
+				s_label.text = str(round(speed * 3.6)) + "  KMPH"
+			var g_label = legacy_hud.get_node_or_null("gearshift_label")
+			if g_label:
+				g_label.text = "Gear: " + str(gearshift)
 		
 	# Keep track of previous velocity for crash speed check
 	previous_velocity = linear_velocity
@@ -127,11 +136,9 @@ func _process_damage_effects():
 	if is_instance_valid(smoke_particles):
 		if GameManager.car_damage > 70.0:
 			smoke_particles.emitting = true
-			# Pitch black thick smoke
 			smoke_particles.material_override.albedo_color = Color(0.1, 0.1, 0.1, 0.9)
 		elif GameManager.car_damage > 40.0:
 			smoke_particles.emitting = true
-			# Light gray smoke
 			smoke_particles.material_override.albedo_color = Color(0.5, 0.5, 0.5, 0.5)
 		else:
 			smoke_particles.emitting = false
@@ -140,11 +147,9 @@ func _on_car_body_entered(body):
 	if not is_local_player():
 		return
 		
-	# Coins/Fuel stations have collision masks that shouldn't damage the car
 	if body is Area3D:
 		return
 		
-	# Calculate how hard the hit was using difference in velocity
 	var impact_velocity = previous_velocity - linear_velocity
 	var impact_speed = impact_velocity.length()
 	
