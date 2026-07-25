@@ -17,10 +17,19 @@ extends CanvasLayer
 @onready var music_slider = $PauseMenu/VolumeContainer/MusicSlider
 @onready var sfx_slider = $PauseMenu/VolumeContainer/SfxSlider
 
+# Fuel Station Interactive Elements
+@onready var refuel_prompt_btn = $MainContainer/RefuelPromptBtn
+@onready var refuel_menu = $RefuelMenu
+@onready var refuel_status_label = $RefuelMenu/StatusLabel
+
 var car_node: BaseCar = null
 
 func _ready():
+	add_to_group("mobile_hud")
+	
 	pause_menu.visible = false
+	refuel_menu.visible = false
+	refuel_prompt_btn.visible = false
 	
 	# Try to find car
 	var cars = get_tree().get_nodes_in_group("player_car")
@@ -75,6 +84,32 @@ func _process(delta):
 			mission_status_label.add_theme_color_override("font_color", Color.GREEN)
 		else:
 			mission_status_label.text = "Coins Remaining: " + str(remaining_coins)
+
+# --- REFUEL STATION INTERACTION ---
+func show_refuel_prompt(is_visible: bool):
+	refuel_prompt_btn.visible = is_visible
+	if not is_visible:
+		refuel_menu.visible = false
+
+func _on_refuel_prompt_pressed():
+	refuel_menu.visible = true
+	refuel_status_label.text = "Fuel Level: " + str(round(GameManager.car_fuel)) + "%"
+
+func _on_buy_fuel_pressed(pct: int, cost: int):
+	if GameManager.coins >= cost:
+		if GameManager.car_fuel >= 100.0:
+			refuel_status_label.text = "Tank is already full! 🔋"
+			return
+			
+		GameManager.coins -= cost
+		GameManager.car_fuel = clamp(GameManager.car_fuel + pct, 0.0, GameManager.car_max_fuel)
+		GameManager.save_game_settings()
+		refuel_status_label.text = "Successfully bought +" + str(pct) + "% Fuel! 🪙 -" + str(cost)
+	else:
+		refuel_status_label.text = "NOT ENOUGH COINS! Need " + str(cost) + " Coins 🪙"
+
+func _on_close_refuel_pressed():
+	refuel_menu.visible = false
 
 # --- TOUCH CONTROLS SIMULATION ---
 func _on_left_pressed():
