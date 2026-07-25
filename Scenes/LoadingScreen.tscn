@@ -4,50 +4,48 @@
 [ext_resource type="Texture2D" path="res://project_icon.png" id="2_icon"]
 
 [sub_resource type="Gradient" id="Gradient_loading"]
-colors = PackedColorArray(0.02, 0.02, 0.06, 1, 0.08, 0.05, 0.16, 1)
+colors = PackedColorArray(0.05, 0.0, 0.1, 1, 0.2, 0.0, 0.12, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_loading"]
 gradient = SubResource("Gradient_loading")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
-bg_color = Color(0.01, 0.01, 0.03, 0.85)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0, 0.8, 1, 0.25)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
-bg_color = Color(0, 0.85, 1, 0.85)
-border_width_left = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forza_bg"]
+bg_color = Color(0, 0, 0, 0.75)
+border_width_left = 6
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 1, 1, 0.3)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_color = Color(0, 0.85, 1, 0.45)
-shadow_size = 12
+border_color = Color(1, 0.0, 0.45, 1) # Forza pink border accent
+corner_radius_top_left = 4
+corner_radius_top_right = 30
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 30
+shadow_color = Color(1, 0, 0.45, 0.15)
+shadow_size = 25
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_glass_panel"]
-bg_color = Color(0.05, 0.05, 0.12, 0.6)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
+bg_color = Color(0.05, 0.05, 0.08, 0.9)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0, 0.8, 1, 0.2)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+border_color = Color(1, 1, 1, 0.15)
+corner_radius_top_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
+bg_color = Color(1, 0.0, 0.45, 1) # Signature Forza Horizon Neon Pink
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.4, 0.0, 1) # Pink-Orange glow gradient effect
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(1, 0, 0.45, 0.6)
+shadow_size = 15
 
 [sub_resource type="Animation" id="Animation_fade"]
 resource_name = "fade_out"
@@ -89,21 +87,30 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_loading")
 expand_mode = 1
 
+[node name="DecorativeLine" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 120.0
+offset_right = 128.0
+grow_vertical = 2
+color = Color(1, 0, 0.45, 0.4)
+
 [node name="CenterPanel" type="Panel" parent="."]
-custom_minimum_size = Vector2(1100, 750)
+custom_minimum_size = Vector2(1150, 750)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -550.0
+offset_left = -575.0
 offset_top = -375.0
-offset_right = 550.0
+offset_right = 575.0
 offset_bottom = 375.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_glass_panel")
+theme_override_styles/panel = SubResource("StyleBoxFlat_forza_bg")
 
 [node name="Title" type="Label" parent="CenterPanel"]
 layout_mode = 1
@@ -111,15 +118,16 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -450.0
-offset_top = 50.0
+offset_top = 60.0
 offset_right = 450.0
-offset_bottom = 130.0
+offset_bottom = 140.0
 grow_horizontal = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 4
-theme_override_font_sizes/font_size = 56
-text = "CAR DEMO: PRO EDITION"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(1, 0, 0.45, 0.5)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 58
+text = "HORIZON: PRO EDITION"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -130,13 +138,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = -40.0
-offset_bottom = -40.0
+offset_top = -30.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SpinningWheel" type="TextureRect" parent="CenterPanel/LoadingIcon"]
-modulate = Color(0, 0.85, 1, 1)
+modulate = Color(1, 0.4, 0, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -159,9 +167,9 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 100.0
+offset_left = 120.0
 offset_top = -180.0
-offset_right = -100.0
+offset_right = -120.0
 offset_bottom = -135.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -182,7 +190,7 @@ offset_right = -80.0
 offset_bottom = -210.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.85, 0.92, 1, 1)
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "Tip: Hold Space or touch Drift to slide around corners!"
 horizontal_alignment = 1
@@ -201,6 +209,7 @@ offset_right = -100.0
 offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0.45, 1)
 theme_override_font_sizes/font_size = 28
 text = "0%"
 horizontal_alignment = 1

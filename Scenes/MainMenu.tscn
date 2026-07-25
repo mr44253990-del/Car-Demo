@@ -1,27 +1,41 @@
-[gd_scene load_steps=5 format=3 uid="uid://cb3u27qy6ox1e"]
+[gd_scene load_steps=6 format=3 uid="uid://cb3u27qy6ox1e"]
 
 [ext_resource type="Script" path="res://Scripts/MainMenu.gd" id="1_mainmenu"]
 
 [sub_resource type="Gradient" id="Gradient_menu"]
-colors = PackedColorArray(0.04, 0.04, 0.1, 1, 0.1, 0.08, 0.22, 1)
+colors = PackedColorArray(0.02, 0.0, 0.06, 1, 0.12, 0.0, 0.1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_menu"]
 gradient = SubResource("Gradient_menu")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.05, 0.05, 0.12, 0.65)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0, 0.75, 1, 0.3)
-corner_radius_top_left = 24
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sidebar"]
+bg_color = Color(0, 0, 0, 0.8)
+border_width_left = 6
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0, 0.45, 1) # Forza pink border accent
+corner_radius_top_left = 4
 corner_radius_top_right = 24
-corner_radius_bottom_right = 24
+corner_radius_bottom_right = 4
 corner_radius_bottom_left = 24
-shadow_color = Color(0, 0, 0, 0.4)
+shadow_color = Color(1, 0, 0.45, 0.1)
+shadow_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_content_panel"]
+bg_color = Color(0, 0, 0, 0.65)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 6
+border_width_bottom = 1
+border_color = Color(1, 0.4, 0, 1) # Forza Orange/Yellow accent
+corner_radius_top_left = 24
+corner_radius_top_right = 4
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 4
+shadow_color = Color(1, 0.4, 0, 0.1)
 shadow_size = 15
 
 [node name="MainMenu" type="Control"]
@@ -60,8 +74,11 @@ offset_top = -30.0
 offset_right = 640.0
 offset_top = 30.0
 grow_vertical = 2
-theme_override_font_sizes/font_size = 42
-text = "🚗 CAR DEMO: ULTIMATE"
+theme_override_colors/font_shadow_color = Color(1, 0, 0.45, 0.5)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 46
+text = "HORIZON: PRO RACING"
 vertical_alignment = 1
 
 [node name="CoinsLabel" type="Label" parent="TopBar"]
@@ -78,6 +95,9 @@ offset_top = 30.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_shadow_color = Color(1, 0.4, 0, 0.3)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 36
 text = "COINS: 0 🪙"
 horizontal_alignment = 2
@@ -88,66 +108,66 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 30.0
+offset_left = 40.0
 offset_top = 150.0
-offset_right = -30.0
-offset_bottom = -30.0
+offset_right = -40.0
+offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 40
 
 [node name="Sidebar" type="Panel" parent="MainLayout"]
-custom_minimum_size = Vector2(360, 0)
+custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxFlat_sidebar")
 
 [node name="ButtonsContainer" type="VBoxContainer" parent="MainLayout/Sidebar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 25.0
-offset_top = 30.0
-offset_right = -25.0
-offset_bottom = -30.0
+offset_left = 30.0
+offset_top = 40.0
+offset_right = -30.0
+offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 
 [node name="PlayTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "MISSIONS 🎮"
+text = "HORIZON PLAY 🎮"
 
 [node name="GarageTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "GARAGE 🛠️"
+text = "PAINT & SHOP 🛠️"
 
 [node name="MultiplayerTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "MULTIPLAYER 🌐"
 
 [node name="SettingsTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "SETTINGS ⚙️"
+text = "FESTIVAL SETUP ⚙️"
 
 [node name="Spacer" type="Control" parent="MainLayout/Sidebar/ButtonsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="ExitBtn" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_color = Color(1, 0.2, 0.4, 1)
 theme_override_font_sizes/font_size = 32
-text = "QUIT GAME ❌"
+text = "QUIT FESTIVAL ❌"
 
 [node name="ContentArea" type="Control" parent="MainLayout"]
 layout_mode = 2
@@ -160,18 +180,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxFlat_content_panel")
 
 [node name="Label" type="Label" parent="MainLayout/ContentArea/PlayPanel"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 30.0
-offset_bottom = 80.0
+offset_top = 40.0
+offset_bottom = 90.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 38
-text = "CHOOSE MISSION"
+theme_override_colors/font_color = Color(1, 0, 0.45, 1)
+theme_override_font_sizes/font_size = 40
+text = "SELECT EXPEDITION"
 horizontal_alignment = 1
 
 [node name="MissionGrid" type="HBoxContainer" parent="MainLayout/ContentArea/PlayPanel"]
@@ -183,32 +203,32 @@ anchor_bottom = 0.5
 offset_left = 40.0
 offset_top = -180.0
 offset_right = -40.0
-offset_bottom = -70.0
+offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 alignment = 1
 
 [node name="Mission1" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 26
-text = "Mission 1\nFree Roam"
+theme_override_font_sizes/font_size = 28
+text = "FREE ROAM"
 
 [node name="Mission2" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 26
-text = "Mission 2\nCoin Rush"
+theme_override_font_sizes/font_size = 28
+text = "COIN RUSH"
 
 [node name="Mission3" type="Button" parent="MainLayout/ContentArea/PlayPanel/MissionGrid"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 26
-text = "Mission 3\nFuel Survivor"
+theme_override_font_sizes/font_size = 28
+text = "FUEL SURVIVOR"
 
 [node name="MissionDescLabel" type="Label" parent="MainLayout/ContentArea/PlayPanel"]
 layout_mode = 1
@@ -217,34 +237,34 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = 60.0
-offset_top = -40.0
+offset_top = -30.0
 offset_right = -60.0
-offset_bottom = 150.0
+offset_bottom = 160.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 26
-text = "Select a mission to view details."
+theme_override_font_sizes/font_size = 28
+text = "Select a festival event to view details."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="StartGameButton" type="Button" parent="MainLayout/ContentArea/PlayPanel"]
-custom_minimum_size = Vector2(350, 90)
+custom_minimum_size = Vector2(380, 95)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -175.0
-offset_top = -120.0
-offset_right = 175.0
-offset_bottom = -30.0
+offset_left = -190.0
+offset_top = -130.0
+offset_right = 190.0
+offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
-theme_override_font_sizes/font_size = 36
-text = "START GAME 🏁"
+theme_override_font_sizes/font_size = 38
+text = "START EVENT 🏁"
 
 [node name="GaragePanel" type="Panel" parent="MainLayout/ContentArea"]
 visible = false
@@ -254,18 +274,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxFlat_content_panel")
 
 [node name="Label" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 30.0
-offset_bottom = 80.0
+offset_top = 40.0
+offset_bottom = 90.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 0.6, 0, 1)
-theme_override_font_sizes/font_size = 38
-text = "VEHICLE GARAGE"
+theme_override_colors/font_color = Color(1, 0.4, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "FESTIVAL PAINT & SHOP"
 horizontal_alignment = 1
 
 [node name="CarStatusLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
@@ -278,7 +298,7 @@ offset_top = -190.0
 offset_bottom = -140.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 32
 text = "Status: Perfect"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -294,8 +314,8 @@ offset_bottom = -70.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_font_sizes/font_size = 30
-text = "Car Damage: 0%"
+theme_override_font_sizes/font_size = 32
+text = "Vehicle Damage: 0%"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -310,27 +330,27 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 32
 text = "Repair Cost: 0 Coins"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="RepairButton" type="Button" parent="MainLayout/ContentArea/GaragePanel"]
-custom_minimum_size = Vector2(400, 85)
+custom_minimum_size = Vector2(420, 90)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -200.0
-offset_top = -240.0
-offset_right = 200.0
-offset_bottom = -155.0
+offset_left = -210.0
+offset_top = -250.0
+offset_right = 210.0
+offset_bottom = -160.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 34
 text = "REPAIR VEHICLE 🛠️"
 
 [node name="PaintLabel" type="Label" parent="MainLayout/ContentArea/GaragePanel"]
@@ -346,9 +366,9 @@ offset_right = 300.0
 offset_top = -100.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "Customize Paint Job (Cost: 50 🪙):"
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 26
+text = "Livery Paint (Cost: 50 🪙):"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -359,41 +379,41 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -300.0
+offset_left = -320.0
 offset_top = -90.0
-offset_right = 300.0
+offset_right = 320.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 15
+theme_override_constants/separation = 20
 alignment = 1
 
 [node name="Red" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "RED 🔴"
 
 [node name="Blue" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.6, 1, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "BLUE 🔵"
 
 [node name="Green" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 1, 0.5, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "GREEN 🟢"
 
 [node name="Gold" type="Button" parent="MainLayout/ContentArea/GaragePanel/PaintColors"]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "GOLD 🟡"
 
 [node name="MultiplayerPanel" type="Panel" parent="MainLayout/ContentArea"]
@@ -404,18 +424,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxFlat_content_panel")
 
 [node name="Label" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 30.0
-offset_bottom = 80.0
+offset_top = 40.0
+offset_bottom = 90.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.2, 0.8, 0.4, 1)
-theme_override_font_sizes/font_size = 38
-text = "OFFLINE MULTIPLAYER"
+theme_override_colors/font_color = Color(0.2, 0.85, 0.45, 1)
+theme_override_font_sizes/font_size = 40
+text = "MULTIPLAYER SESSION"
 horizontal_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="MainLayout/ContentArea/MultiplayerPanel"]
@@ -425,37 +445,37 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -330.0
-offset_top = -220.0
-offset_right = 330.0
+offset_left = -340.0
+offset_top = -230.0
+offset_right = 340.0
 offset_bottom = -80.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/horizontal_separation = 30
-theme_override_constants/vertical_separation = 20
+theme_override_constants/vertical_separation = 25
 columns = 2
 
 [node name="IpLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 28
 text = "Host IP Address:"
 
 [node name="IpInput" type="LineEdit" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
-custom_minimum_size = Vector2(340, 55)
+custom_minimum_size = Vector2(350, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 26
 text = "192.168.43.1"
 placeholder_text = "e.g. 192.168.43.1"
 
 [node name="PortLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 28
 text = "Server Port:"
 
 [node name="PortInput" type="LineEdit" parent="MainLayout/ContentArea/MultiplayerPanel/GridContainer"]
-custom_minimum_size = Vector2(340, 55)
+custom_minimum_size = Vector2(350, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 26
 text = "25565"
 placeholder_text = "e.g. 25565"
 
@@ -476,17 +496,17 @@ theme_override_constants/separation = 30
 alignment = 1
 
 [node name="HostWifi" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel/Buttons"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 28
 text = "CREATE ROOM 🏠"
 
 [node name="JoinRoom" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel/Buttons"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 28
 text = "JOIN ROOM 🤝"
 
 [node name="MpStatusLabel" type="Label" parent="MainLayout/ContentArea/MultiplayerPanel"]
@@ -499,7 +519,7 @@ offset_top = 60.0
 offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 26
 text = "Status: Idle"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -516,28 +536,28 @@ offset_right = -40.0
 offset_bottom = -110.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "Connected Players:"
 horizontal_alignment = 1
 
 [node name="StartMpButton" type="Button" parent="MainLayout/ContentArea/MultiplayerPanel"]
 visible = false
-custom_minimum_size = Vector2(350, 80)
+custom_minimum_size = Vector2(360, 85)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -175.0
+offset_left = -180.0
 offset_top = -100.0
-offset_right = 175.0
-offset_bottom = -20.0
+offset_right = 180.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
-theme_override_font_sizes/font_size = 28
-text = "PLAY MULTIPLAYER ▶️"
+theme_override_font_sizes/font_size = 30
+text = "PLAY SESSION ▶"
 
 [node name="SettingsPanel" type="Panel" parent="MainLayout/ContentArea"]
 visible = false
@@ -547,41 +567,41 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxFlat_content_panel")
 
 [node name="Label" type="Label" parent="MainLayout/ContentArea/SettingsPanel"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 20.0
-offset_bottom = 70.0
+offset_top = 30.0
+offset_bottom = 80.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.9, 0.4, 1, 1)
-theme_override_font_sizes/font_size = 38
-text = "GAME SETTINGS"
+theme_override_font_sizes/font_size = 40
+text = "FESTIVAL CONFIG"
 horizontal_alignment = 1
 
 [node name="VolumeContainer" type="VBoxContainer" parent="MainLayout/ContentArea/SettingsPanel"]
 layout_mode = 1
 offset_left = 40.0
-offset_top = 90.0
-offset_right = 460.0
-offset_bottom = 450.0
-theme_override_constants/separation = 20
+offset_top = 100.0
+offset_right = 470.0
+offset_bottom = 470.0
+theme_override_constants/separation = 22
 
 [node name="AudioLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 28
-text = "Sound & Music"
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Audio Control"
 
 [node name="MasterLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "Master Volume:"
 
 [node name="MasterSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 max_value = 1.0
 step = 0.05
@@ -589,11 +609,11 @@ value = 1.0
 
 [node name="MusicLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "Music Volume:"
 
 [node name="MusicSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 max_value = 1.0
 step = 0.05
@@ -601,11 +621,11 @@ value = 0.8
 
 [node name="SfxLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 24
 text = "Sound Effects (SFX):"
 
 [node name="SfxSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/VolumeContainer"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 max_value = 1.0
 step = 0.05
@@ -613,27 +633,27 @@ value = 0.8
 
 [node name="GraphicsContainer" type="VBoxContainer" parent="MainLayout/ContentArea/SettingsPanel"]
 layout_mode = 1
-offset_left = 520.0
-offset_top = 90.0
-offset_right = 940.0
-offset_bottom = 470.0
-theme_override_constants/separation = 20
+offset_left = 530.0
+offset_top = 100.0
+offset_right = 960.0
+offset_bottom = 490.0
+theme_override_constants/separation = 22
 
 [node name="GraphicsLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 30
 text = "Graphics Engine"
 
 [node name="PresetLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Graphics Preset:"
+theme_override_font_sizes/font_size = 24
+text = "Graphics Quality:"
 
 [node name="PresetOption" type="OptionButton" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
-custom_minimum_size = Vector2(0, 55)
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 26
 alignment = 1
 item_count = 3
 selected = 1
@@ -646,11 +666,11 @@ popup/item_2/id = 2
 
 [node name="DistLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Render Distance (Render Limit):"
+theme_override_font_sizes/font_size = 24
+text = "Render Distance (Limits):"
 
 [node name="DistSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 min_value = 50.0
 max_value = 1000.0
@@ -659,11 +679,11 @@ value = 250.0
 
 [node name="ResLabel" type="Label" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Resolution Scale (3D Pixel Density):"
+theme_override_font_sizes/font_size = 24
+text = "Resolution Scale (Density):"
 
 [node name="ResSlider" type="HSlider" parent="MainLayout/ContentArea/SettingsPanel/GraphicsContainer"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 min_value = 0.5
 max_value = 2.0

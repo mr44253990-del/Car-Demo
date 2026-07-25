@@ -206,7 +206,7 @@ func process_steer(delta):
 	steer_target *= STEER_LIMIT
 	steering = move_toward(steering, steer_target, STEER_SPEED * delta)
 
-func process_brake(delta):
+func process_brake(_delta):
 	if Input.is_action_pressed("ui_select"):
 		brake = 0.8
 		$wheel_rear_left.wheel_friction_slip = 1.8 # Drift slide effect!

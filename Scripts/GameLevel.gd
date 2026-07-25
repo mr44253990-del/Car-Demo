@@ -114,7 +114,7 @@ func setup_multiplayer_game():
 		
 	# Spawn local player car
 	var my_id = multiplayer.get_unique_id()
-	var my_car = spawn_player_car(my_id)
+	var _my_car = spawn_player_car(my_id)
 	
 	# If host, listen to incoming peers to spawn their cars
 	if GameManager.is_host:
