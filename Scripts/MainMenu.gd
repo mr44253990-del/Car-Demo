@@ -6,6 +6,7 @@ extends Control
 @onready var garage_panel = $MainLayout/ContentArea/GaragePanel
 @onready var settings_panel = $MainLayout/ContentArea/SettingsPanel
 @onready var multiplayer_panel = $MainLayout/ContentArea/MultiplayerPanel
+@onready var daily_panel = $MainLayout/ContentArea/DailyPanel
 
 # Coin and status labels
 @onready var coins_label = $TopBar/CoinsLabel
@@ -26,6 +27,9 @@ extends Control
 @onready var repair_cost_label = $MainLayout/ContentArea/GaragePanel/RepairCostLabel
 @onready var garage_car_status = $MainLayout/ContentArea/GaragePanel/CarStatusLabel
 
+# Daily Panel labels
+@onready var daily_status_label = $MainLayout/ContentArea/DailyPanel/DailyStatusLabel
+
 # Multiplayer inputs/labels
 @onready var ip_input = $MainLayout/ContentArea/MultiplayerPanel/GridContainer/IpInput
 @onready var port_input = $MainLayout/ContentArea/MultiplayerPanel/GridContainer/PortInput
@@ -36,8 +40,10 @@ extends Control
 const DEFAULT_PORT = 25565
 var peer = ENetMultiplayerPeer.new()
 
+# Store original positions of panels for slide-in transitions
+var panel_positions: Dictionary = {}
+
 func _ready():
-	# Explicitly unpause game to prevent freeze on main menu
 	get_tree().paused = false
 	
 	# Connect multiplayer signals safely
@@ -52,41 +58,56 @@ func _ready():
 	if not multiplayer.server_disconnected.is_connected(_on_server_disconnected):
 		multiplayer.server_disconnected.connect(_on_server_disconnected)
 	
+	# Cache panel original positions for slide transitions
+	_cache_panel_positions()
+	
 	update_global_ui()
 	show_panel(play_panel) # Default panel
 	init_settings_values()
 	select_mission(0)
 	
-	# SETUP DYNAMIC HOVER EFFECTS FOR ALL MENU BUTTONS
 	_apply_dynamic_hover_animations()
+
+func _cache_panel_positions():
+	var panels = [play_panel, garage_panel, settings_panel, multiplayer_panel, daily_panel]
+	for p in panels:
+		panel_positions[p.name] = p.position
 
 func update_global_ui():
 	coins_label.text = "COINS: " + str(GameManager.coins) + " 🪙"
 	update_garage_ui()
+	update_daily_status_ui()
 
+# --- SLIDING PANEL TRANSITIONS (Forza Horizon Style) ---
 func show_panel(target_panel: Panel):
-	play_panel.visible = false
-	garage_panel.visible = false
-	settings_panel.visible = false
-	multiplayer_panel.visible = false
+	# Hide all panels
+	var panels = [play_panel, garage_panel, settings_panel, multiplayer_panel, daily_panel]
+	for p in panels:
+		p.visible = false
+		p.modulate.a = 0.0
 	
+	# Reset target position and animate slide + fade-in
 	target_panel.visible = true
+	target_panel.modulate.a = 0.0
+	
+	var orig_pos = panel_positions.get(target_panel.name, target_panel.position)
+	target_panel.position = orig_pos + Vector2(60, 0) # offset slightly to the right
+	
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUART)
+	tween.tween_property(target_panel, "modulate:a", 1.0, 0.35)
+	tween.parallel().tween_property(target_panel, "position", orig_pos, 0.35)
 
-# --- DYNAMIC HOVER EFFECTS (Forza Horizon Style) ---
+# --- DYNAMIC HOVER EFFECTS ---
 func _apply_dynamic_hover_animations():
-	# Recursively search for all Button nodes in the menu and hook hover animations
 	_hook_buttons_recursive(self)
 
 func _hook_buttons_recursive(node: Node):
 	if node is Button:
-		# Set pivot offset to center so scaling looks nice and even
 		node.pivot_offset = node.size / 2.0
-		
-		# Connect mouse entered (hover)
 		if not node.mouse_entered.is_connected(_on_button_hover_enter.bind(node)):
 			node.mouse_entered.connect(_on_button_hover_enter.bind(node))
-			
-		# Connect mouse exited
 		if not node.mouse_exited.is_connected(_on_button_hover_exit.bind(node)):
 			node.mouse_exited.connect(_on_button_hover_exit.bind(node))
 			
@@ -94,26 +115,18 @@ func _hook_buttons_recursive(node: Node):
 		_hook_buttons_recursive(child)
 
 func _on_button_hover_enter(btn: Button):
-	# Center pivot offset again in case size changed
 	btn.pivot_offset = btn.size / 2.0
-	
-	# Smoothly scale button up on hover for a dynamic premium look
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_ELASTIC)
 	tween.tween_property(btn, "scale", Vector2(1.06, 1.06), 0.4)
-	
-	# Add custom tint highlight on hover
-	btn.add_theme_color_override("font_color", Color(1, 0, 0.45)) # Horizon pink tint
+	btn.add_theme_color_override("font_color", Color(1, 0, 0.45))
 
 func _on_button_hover_exit(btn: Button):
-	# Smoothly scale button back to original scale
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.25)
-	
-	# Remove hover tint
 	btn.remove_theme_color_override("font_color")
 
 # --- TAB SELECTION HANDLERS ---
@@ -130,6 +143,10 @@ func _on_multiplayer_tab_pressed():
 func _on_settings_tab_pressed():
 	show_panel(settings_panel)
 
+func _on_daily_tab_pressed():
+	show_panel(daily_panel)
+	update_daily_status_ui()
+
 func _on_exit_pressed():
 	get_tree().quit()
 
@@ -140,7 +157,7 @@ func select_mission(id: int):
 		0:
 			mission_desc_label.text = "MISSION 1: Free Roam\n\nNo time limit! Practice drifting, explore the map, collect coins, and refuel whenever you want."
 		1:
-			mission_desc_label.text = "MISSION 2: Coin Rush\n\nCollect all 15 scattered coins on the map before time runs out! Drive fast and precise."
+			mission_desc_label.text = "MISSION 2: Coin Rush\n\nCollect all 100+ scattered coins on the map before time runs out! Drive fast and precise."
 		2:
 			mission_desc_label.text = "MISSION 3: Fuel Survivor\n\nFuel consumption is doubled! Keep buying fuel from stations before running empty. Survive as long as you can!"
 
@@ -149,7 +166,7 @@ func _on_start_game_pressed():
 	GameManager.is_multiplayer = false
 	GameManager.transition_to_scene("res://main.tscn")
 
-# --- GARAGE SYSTEM (With Smart Custom Paints) ---
+# --- GARAGE SYSTEM ---
 func update_garage_ui():
 	var damage = GameManager.car_damage
 	damage_label.text = "Car Damage: " + str(round(damage)) + "%"
@@ -195,6 +212,25 @@ func _on_paint_car(color_name: String):
 		repair_cost_label.text = "Painted " + color_name.to_upper() + "! Cost: " + str(paint_cost) + " Coins"
 	else:
 		repair_cost_label.text = "NOT ENOUGH COINS! Paint cost: " + str(paint_cost) + " Coins"
+
+# --- PERSISTENT DAILY REWARD CENTER ---
+func update_daily_status_ui():
+	var today_date = Time.get_date_string_from_system()
+	if GameManager.last_claim_date == today_date:
+		daily_status_label.text = "Status: ALREADY CLAIMED TODAY ✅\nCome back tomorrow for your next reward!"
+		daily_status_label.add_theme_color_override("font_color", Color.GREEN)
+	else:
+		daily_status_label.text = "Status: REWARD READY TO CLAIM 🎁\nClaim now to receive 200 Coins persistently on your device!"
+		daily_status_label.add_theme_color_override("font_color", Color(1, 0, 0.45)) # neon pink
+
+func _on_claim_daily_pressed():
+	var res = GameManager.claim_daily_reward()
+	daily_status_label.text = res["message"]
+	if res["success"]:
+		daily_status_label.add_theme_color_override("font_color", Color.GREEN)
+		update_global_ui()
+	else:
+		daily_status_label.add_theme_color_override("font_color", Color.YELLOW)
 
 # --- SETTINGS SYSTEM ---
 func init_settings_values():
@@ -245,7 +281,7 @@ func _on_res_scale_changed(value: float):
 func _on_host_wifi_pressed():
 	var port = int(port_input.text) if port_input.text != "" else DEFAULT_PORT
 	peer.close()
-	var err = peer.create_server(port, 6) # max 6 players
+	var err = peer.create_server(port, 6)
 	if err != OK:
 		mp_status_label.text = "Failed to host room! Error: " + str(err)
 		return

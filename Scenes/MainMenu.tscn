@@ -127,46 +127,52 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 30.0
-offset_top = 40.0
+offset_top = 30.0
 offset_right = -30.0
-offset_bottom = -40.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 15
 
 [node name="PlayTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 95)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "HORIZON PLAY 🎮"
 
 [node name="GarageTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 95)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "PAINT & SHOP 🛠️"
 
 [node name="MultiplayerTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 95)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "MULTIPLAYER 🌐"
 
 [node name="SettingsTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 95)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "FESTIVAL SETUP ⚙️"
+
+[node name="DailyTab" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "DAILY REWARD 📅"
 
 [node name="Spacer" type="Control" parent="MainLayout/Sidebar/ButtonsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="ExitBtn" type="Button" parent="MainLayout/Sidebar/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 95)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.2, 0.4, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "QUIT FESTIVAL ❌"
 
 [node name="ContentArea" type="Control" parent="MainLayout"]
@@ -690,10 +696,89 @@ max_value = 2.0
 step = 0.1
 value = 1.0
 
+[node name="DailyPanel" type="Panel" parent="MainLayout/ContentArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_content_panel")
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/DailyPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 40.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0, 0.45, 1)
+theme_override_font_sizes/font_size = 40
+text = "DAILY REWARD CENTER"
+horizontal_alignment = 1
+
+[node name="DescLabel" type="Label" parent="MainLayout/ContentArea/DailyPanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -140.0
+offset_right = -60.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 26
+text = "Claim your free daily tuning and check-in coins persistently on your device!
+Rewards reset every calendar day."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="DailyStatusLabel" type="Label" parent="MainLayout/ContentArea/DailyPanel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -30.0
+offset_right = -60.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "Status: Checking reward availability..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ClaimDailyBtn" type="Button" parent="MainLayout/ContentArea/DailyPanel"]
+custom_minimum_size = Vector2(400, 95)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = -85.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 32
+text = "CLAIM 200 COINS 🎁"
+
 [connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/PlayTab" to="." method="_on_play_tab_pressed"]
 [connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/GarageTab" to="." method="_on_garage_tab_pressed"]
 [connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/MultiplayerTab" to="." method="_on_multiplayer_tab_pressed"]
 [connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/SettingsTab" to="." method="_on_settings_tab_pressed"]
+[connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/DailyTab" to="." method="_on_daily_tab_pressed"]
 [connection signal="pressed" from="MainLayout/Sidebar/ButtonsContainer/ExitBtn" to="." method="_on_exit_pressed"]
 [connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/MissionGrid/Mission1" to="." method="select_mission" binds= [0]]
 [connection signal="pressed" from="MainLayout/ContentArea/PlayPanel/MissionGrid/Mission2" to="." method="select_mission" binds= [1]]
@@ -713,3 +798,4 @@ value = 1.0
 [connection signal="item_selected" from="MainLayout/ContentArea/SettingsPanel/GraphicsContainer/PresetOption" to="." method="_on_preset_selected"]
 [connection signal="value_changed" from="MainLayout/ContentArea/SettingsPanel/GraphicsContainer/DistSlider" to="." method="_on_render_distance_changed"]
 [connection signal="value_changed" from="MainLayout/ContentArea/SettingsPanel/GraphicsContainer/ResSlider" to="." method="_on_res_scale_changed"]
+[connection signal="pressed" from="MainLayout/ContentArea/DailyPanel/ClaimDailyBtn" to="." method="_on_claim_daily_pressed"]
