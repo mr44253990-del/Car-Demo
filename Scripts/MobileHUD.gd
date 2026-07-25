@@ -57,7 +57,7 @@ func _process(delta):
 	# Update Coins
 	coins_label.text = "COINS: " + str(GameManager.coins) + " 🪙"
 	
-	# Find car if null (in multiplayer or spawn delay)
+	# Find car if null
 	if not is_instance_valid(car_node):
 		var cars = get_tree().get_nodes_in_group("player_car")
 		if cars.size() > 0:
@@ -67,7 +67,7 @@ func _process(delta):
 	if is_instance_valid(car_node):
 		var speed_kmh = round(car_node.linear_velocity.length() * 3.6)
 		speed_label.text = str(speed_kmh) + " KMPH"
-		gear_label.text = "Gear: " + str(car_node.gearshift)
+		gear_label.text = "Gear: " + ("A" if car_node.speed > 0 else "N") + str(car_node.gearshift)
 		
 	# Update Fuel and Damage bars
 	fuel_bar.value = GameManager.car_fuel
@@ -111,6 +111,19 @@ func _on_buy_fuel_pressed(pct: int, cost: int):
 func _on_close_refuel_pressed():
 	refuel_menu.visible = false
 
+# --- LIGHTS & HORN CONTROLS ---
+func _on_lights_pressed():
+	if is_instance_valid(car_node) and car_node.has_method("toggle_headlights"):
+		car_node.toggle_headlights(not car_node.headlights_active)
+
+func _on_horn_pressed():
+	if is_instance_valid(car_node) and car_node.has_method("trigger_horn"):
+		car_node.trigger_horn(true)
+
+func _on_horn_released():
+	if is_instance_valid(car_node) and car_node.has_method("trigger_horn"):
+		car_node.trigger_horn(false)
+
 # --- TOUCH CONTROLS SIMULATION ---
 func _on_left_pressed():
 	Input.action_press("left")
@@ -141,11 +154,6 @@ func _on_drift_pressed():
 
 func _on_drift_released():
 	Input.action_release("ui_select")
-
-func _on_gear_pressed():
-	Input.action_press("gear")
-	await get_tree().create_timer(0.1).timeout
-	Input.action_release("gear")
 
 func _on_camera_pressed():
 	var cameras = get_tree().get_nodes_in_group("game_camera")

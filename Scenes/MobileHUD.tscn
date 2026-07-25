@@ -67,13 +67,19 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -550.0
+offset_left = -710.0
 offset_top = 30.0
 offset_right = -30.0
 offset_bottom = 110.0
 grow_horizontal = 0
-theme_override_constants/separation = 20
+theme_override_constants/separation = 15
 alignment = 2
+
+[node name="LightsBtn" type="Button" parent="MainContainer/TopRight"]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "LIGHTS 💡"
 
 [node name="ResetBtn" type="Button" parent="MainContainer/TopRight"]
 custom_minimum_size = Vector2(160, 70)
@@ -262,21 +268,24 @@ custom_minimum_size = Vector2(110, 110)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 24
-text = "GEAR\n⚙️"
+text = "HORN
+📯"
 
 [node name="DriftBtn" type="Button" parent="MainContainer/ActionControls"]
 custom_minimum_size = Vector2(130, 130)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 26
-text = "DRIFT\n⭕"
+text = "DRIFT
+⭕"
 
 [node name="BrakeBtn" type="Button" parent="MainContainer/ActionControls"]
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 26
-text = "REVERSE\n▼"
+text = "REVERSE
+▼"
 
 [node name="GasBtn" type="Button" parent="MainContainer/ActionControls"]
 custom_minimum_size = Vector2(150, 150)
@@ -284,7 +293,8 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
 theme_override_font_sizes/font_size = 36
-text = "GAS\n▲"
+text = "GAS
+▲"
 
 [node name="PauseMenu" type="Panel" parent="."]
 visible = false
@@ -481,6 +491,7 @@ theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
 theme_override_font_sizes/font_size = 22
 text = "CLOSE ❌"
 
+[connection signal="pressed" from="MainContainer/TopRight/LightsBtn" to="." method="_on_lights_pressed"]
 [connection signal="pressed" from="MainContainer/TopRight/ResetBtn" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="MainContainer/TopRight/CameraBtn" to="." method="_on_camera_pressed"]
 [connection signal="pressed" from="MainContainer/TopRight/PauseBtn" to="." method="_on_pause_pressed"]
@@ -489,7 +500,8 @@ text = "CLOSE ❌"
 [connection signal="button_up" from="MainContainer/SteeringControls/LeftBtn" to="." method="_on_left_released"]
 [connection signal="button_down" from="MainContainer/SteeringControls/RightBtn" to="." method="_on_right_pressed"]
 [connection signal="button_up" from="MainContainer/SteeringControls/RightBtn" to="." method="_on_right_released"]
-[connection signal="pressed" from="MainContainer/ActionControls/GearBtn" to="." method="_on_gear_pressed"]
+[connection signal="button_down" from="MainContainer/ActionControls/GearBtn" to="." method="_on_horn_pressed"]
+[connection signal="button_up" from="MainContainer/ActionControls/GearBtn" to="." method="_on_horn_released"]
 [connection signal="button_down" from="MainContainer/ActionControls/DriftBtn" to="." method="_on_drift_pressed"]
 [connection signal="button_up" from="MainContainer/ActionControls/DriftBtn" to="." method="_on_drift_released"]
 [connection signal="button_down" from="MainContainer/ActionControls/BrakeBtn" to="." method="_on_backward_pressed"]
