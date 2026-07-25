@@ -31,6 +31,13 @@ extends Control
 @onready var handling_up_label = $MainLayout/ContentArea/GaragePanel/UpgradesContainer/HandlingUp/Label
 @onready var brakes_up_label = $MainLayout/ContentArea/GaragePanel/UpgradesContainer/BrakesUp/Label
 
+# Paint buttons for showing BUY / EQUIP status
+@onready var paint_red_btn = $MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Red
+@onready var paint_blue_btn = $MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Blue
+@onready var paint_green_btn = $MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Green
+@onready var paint_gold_btn = $MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Gold
+@onready var paint_default_btn = $MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Default
+
 # Daily Panel labels
 @onready var daily_status_label = $MainLayout/ContentArea/DailyPanel/DailyStatusLabel
 
@@ -193,6 +200,21 @@ func update_garage_ui():
 	handling_up_label.text = "Handling (Lvl " + str(GameManager.upgrade_handling) + "/5)\nCost: " + (str(cost_handling) if GameManager.upgrade_handling < 5 else "MAX") + " 🪙"
 	brakes_up_label.text = "Brakes (Lvl " + str(GameManager.upgrade_brakes) + "/5)\nCost: " + (str(cost_brakes) if GameManager.upgrade_brakes < 5 else "MAX") + " 🪙"
 
+	# Update Paint Buttons Buy / Equip state dynamically!
+	_update_paint_button_labels()
+
+func _update_paint_button_labels():
+	var red_unlocked = "red" in GameManager.purchased_skins
+	var blue_unlocked = "blue" in GameManager.purchased_skins
+	var green_unlocked = "green" in GameManager.purchased_skins
+	var gold_unlocked = "gold" in GameManager.purchased_skins
+	
+	paint_red_btn.text = "RED 🔴\n(EQUIP)" if red_unlocked else "RED 🔴\n(50 🪙)"
+	paint_blue_btn.text = "BLUE 🔵\n(EQUIP)" if blue_unlocked else "BLUE 🔵\n(50 🪙)"
+	paint_green_btn.text = "GREEN 🟢\n(EQUIP)" if green_unlocked else "GREEN 🟢\n(50 🪙)"
+	paint_gold_btn.text = "GOLD 🟡\n(EQUIP)" if gold_unlocked else "GOLD 🟡\n(50 🪙)"
+	paint_default_btn.text = "DEFAULT 🟠\n(EQUIP)"
+
 func _on_repair_button_pressed():
 	var cost = int(GameManager.car_damage * 5)
 	if GameManager.car_damage <= 0:
@@ -230,9 +252,21 @@ func _on_upgrade_pressed(type: String):
 		repair_cost_label.text = "NOT ENOUGH COINS! Need " + str(cost) + " Coins 🪙"
 
 func _on_paint_car(color_name: String):
-	var paint_cost = 50
-	if GameManager.coins >= paint_cost:
-		GameManager.coins -= paint_cost
+	if color_name == "default":
+		var save_data = {
+			"coins": GameManager.coins,
+			"car_paint": "default"
+		}
+		var file = FileAccess.open("user://car_paint.cfg", FileAccess.WRITE)
+		if file:
+			file.store_var(save_data)
+			file.close()
+		update_global_ui()
+		repair_cost_label.text = "Reverted to Original Car Paint! (FREE)"
+		return
+		
+	# Check if already purchased
+	if color_name in GameManager.purchased_skins:
 		var save_data = {
 			"coins": GameManager.coins,
 			"car_paint": color_name
@@ -242,9 +276,27 @@ func _on_paint_car(color_name: String):
 			file.store_var(save_data)
 			file.close()
 		update_global_ui()
-		repair_cost_label.text = "Painted " + color_name.to_upper() + "! Cost: " + str(paint_cost) + " Coins"
+		repair_cost_label.text = "Equipped unlocked " + color_name.to_upper() + " paint!"
 	else:
-		repair_cost_label.text = "NOT ENOUGH COINS! Paint cost: " + str(paint_cost) + " Coins"
+		var paint_cost = 50
+		if GameManager.coins >= paint_cost:
+			GameManager.coins -= paint_cost
+			GameManager.purchased_skins.append(color_name)
+			GameManager.save_game_settings()
+			
+			var save_data = {
+				"coins": GameManager.coins,
+				"car_paint": color_name
+			}
+			var file = FileAccess.open("user://car_paint.cfg", FileAccess.WRITE)
+			if file:
+				file.store_var(save_data)
+				file.close()
+				
+			update_global_ui()
+			repair_cost_label.text = "Successfully bought and equipped " + color_name.to_upper() + " paint! 🪙 -50"
+		else:
+			repair_cost_label.text = "NOT ENOUGH COINS! Need " + str(paint_cost) + " Coins 🪙"
 
 func _on_underglow_color_pressed(color_name: String):
 	GameManager.underglow_color = color_name

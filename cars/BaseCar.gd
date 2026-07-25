@@ -75,16 +75,16 @@ func is_local_player() -> bool:
 	return is_multiplayer_authority()
 
 func _setup_lights():
-	# Front Headlights
+	# Front Headlights (FRONT is +Z, which is at Z = 1.8)
 	headlight_l = SpotLight3D.new()
 	headlight_r = SpotLight3D.new()
 	add_child(headlight_l)
 	add_child(headlight_r)
 	
-	headlight_l.transform.origin = Vector3(0.7, 0.5, -1.8)
-	headlight_r.transform.origin = Vector3(-0.7, 0.5, -1.8)
+	headlight_l.transform.origin = Vector3(0.7, 0.5, 1.8) # Left Front
+	headlight_r.transform.origin = Vector3(-0.7, 0.5, 1.8) # Right Front
 	
-	headlight_l.rotation_degrees = Vector3(0, 180, 0)
+	headlight_l.rotation_degrees = Vector3(0, 180, 0) # Rotate 180 to point forward (+Z)
 	headlight_r.rotation_degrees = Vector3(0, 180, 0)
 	
 	headlight_l.spot_range = 35.0
@@ -94,14 +94,14 @@ func _setup_lights():
 	headlight_l.visible = false
 	headlight_r.visible = false
 	
-	# Rear Brake Lights
+	# Rear Brake Lights (REAR is -Z, which is at Z = -1.8)
 	brakelight_l = OmniLight3D.new()
 	brakelight_r = OmniLight3D.new()
 	add_child(brakelight_l)
 	add_child(brakelight_r)
 	
-	brakelight_l.transform.origin = Vector3(0.7, 0.6, 1.8)
-	brakelight_r.transform.origin = Vector3(-0.7, 0.6, 1.8)
+	brakelight_l.transform.origin = Vector3(0.7, 0.6, -1.8) # Left Rear
+	brakelight_r.transform.origin = Vector3(-0.7, 0.6, -1.8) # Right Rear
 	
 	brakelight_l.light_color = Color.RED
 	brakelight_r.light_color = Color.RED
@@ -113,9 +113,10 @@ func _setup_lights():
 	brakelight_r.visible = false
 
 func _setup_nitro_system():
+	# Nitro system exhaust is at REAR (-Z, which is at Z = -1.8)
 	nitro_particles = CPUParticles3D.new()
 	add_child(nitro_particles)
-	nitro_particles.transform.origin = Vector3(0.0, 0.3, 1.7)
+	nitro_particles.transform.origin = Vector3(0.0, 0.3, -1.8) # rear tailpipe
 	nitro_particles.emitting = false
 	nitro_particles.amount = 40
 	nitro_particles.lifetime = 0.6
@@ -130,21 +131,21 @@ func _setup_nitro_system():
 	mat.emission = Color(0.0, 0.9, 1.0, 1.5)
 	nitro_particles.material_override = mat
 	
-	nitro_particles.direction = Vector3(0, 0, 1)
+	nitro_particles.direction = Vector3(0, 0, -1) # Point backwards (-Z)
 	nitro_particles.spread = 15.0
 	nitro_particles.gravity = Vector3(0, 1, 0)
 	nitro_particles.initial_velocity_min = 4.0
 	nitro_particles.initial_velocity_max = 8.0
 
 func _setup_tire_smoke():
-	# Smoke CPUParticles3D for rear wheels
+	# Tire smoke exhaust is at rear wheels (Z = -1.5)
 	smoke_rear_l = CPUParticles3D.new()
 	smoke_rear_r = CPUParticles3D.new()
 	add_child(smoke_rear_l)
 	add_child(smoke_rear_r)
 	
-	smoke_rear_l.transform.origin = Vector3(0.8, 0.1, 1.5) # behind rear left tire
-	smoke_rear_r.transform.origin = Vector3(-0.8, 0.1, 1.5) # behind rear right tire
+	smoke_rear_l.transform.origin = Vector3(0.8, 0.1, -1.5)
+	smoke_rear_r.transform.origin = Vector3(-0.8, 0.1, -1.5)
 	
 	for sm in [smoke_rear_l, smoke_rear_r]:
 		sm.emitting = false
@@ -155,11 +156,11 @@ func _setup_tire_smoke():
 		sm.mesh.height = 0.3
 		
 		var mat = StandardMaterial3D.new()
-		mat.albedo_color = Color(0.9, 0.9, 0.9, 0.45) # white drift smoke
+		mat.albedo_color = Color(0.9, 0.9, 0.9, 0.45)
 		mat.transparency = StandardMaterial3D.TRANSPARENCY_ALPHA
 		sm.material_override = mat
 		
-		sm.direction = Vector3(0, 0.5, 1)
+		sm.direction = Vector3(0, 0.5, -1) # point backwards
 		sm.spread = 20.0
 		sm.gravity = Vector3(0, 1.5, 0)
 		sm.initial_velocity_min = 2.0
@@ -168,7 +169,7 @@ func _setup_tire_smoke():
 func _setup_smoke_particles():
 	smoke_particles = CPUParticles3D.new()
 	add_child(smoke_particles)
-	smoke_particles.transform.origin = Vector3(0, 0.5, 1.5)
+	smoke_particles.transform.origin = Vector3(0, 0.5, -1.5) # rear engine smoke
 	smoke_particles.emitting = false
 	smoke_particles.amount = 30
 	smoke_particles.lifetime = 1.5
@@ -284,12 +285,11 @@ func _process_tire_smoke_trails():
 			smoke_rear_l.emitting = true
 			smoke_rear_r.emitting = true
 			
-			# Check offroad / dirt color mapping
-			if global_transform.origin.distance_to(Vector3.ZERO) > 40.0: # offroad outskirts
-				smoke_rear_l.material_override.albedo_color = Color(0.45, 0.35, 0.25, 0.5) # dirt color
+			if global_transform.origin.distance_to(Vector3.ZERO) > 40.0:
+				smoke_rear_l.material_override.albedo_color = Color(0.45, 0.35, 0.25, 0.5)
 				smoke_rear_r.material_override.albedo_color = Color(0.45, 0.35, 0.25, 0.5)
 			else:
-				smoke_rear_l.material_override.albedo_color = Color(0.9, 0.9, 0.9, 0.45) # asphalt white smoke
+				smoke_rear_l.material_override.albedo_color = Color(0.9, 0.9, 0.9, 0.45)
 				smoke_rear_r.material_override.albedo_color = Color(0.9, 0.9, 0.9, 0.45)
 		else:
 			smoke_rear_l.emitting = false
@@ -484,12 +484,11 @@ func process_steer(delta):
 	steering = move_toward(steering, steer_target, STEER_SPEED * delta)
 
 func process_brake(_delta):
-	# Slippery wet rain handling check!
 	var grip_slide = 1.8
 	var grip_normal = 2.9
 	if GameManager.current_weather == "rainy":
-		grip_slide = 1.1 # slidey!
-		grip_normal = 1.9 # lower wet grip!
+		grip_slide = 1.1
+		grip_normal = 1.9
 		
 	if Input.is_action_pressed("ui_select"):
 		brake = 0.8

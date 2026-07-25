@@ -8,6 +8,9 @@ var selected_mission_id: int = 0 # 0: Free Roam, 1: Coin Rush, 2: Fuel Survivor
 # --- Daily Check-In persistent save ---
 var last_claim_date: String = ""
 
+# --- Purchased Livery Paints (Persistent) ---
+var purchased_skins: Array = ["default"] # Default skin is always unlocked!
+
 # --- Performance Upgrades (Persistent, Max 5 levels each) ---
 var upgrade_engine: int = 1
 var upgrade_handling: int = 1
@@ -53,6 +56,7 @@ func save_game_settings():
 	var save_data = {
 		"coins": coins,
 		"last_claim_date": last_claim_date,
+		"purchased_skins": purchased_skins,
 		"upgrade_engine": upgrade_engine,
 		"upgrade_handling": upgrade_handling,
 		"upgrade_brakes": upgrade_brakes,
@@ -78,6 +82,7 @@ func load_game_settings():
 			if save_data is Dictionary:
 				if save_data.has("coins"): coins = save_data["coins"]
 				if save_data.has("last_claim_date"): last_claim_date = save_data["last_claim_date"]
+				if save_data.has("purchased_skins"): purchased_skins = save_data["purchased_skins"]
 				if save_data.has("upgrade_engine"): upgrade_engine = save_data["upgrade_engine"]
 				if save_data.has("upgrade_handling"): upgrade_handling = save_data["upgrade_handling"]
 				if save_data.has("upgrade_brakes"): upgrade_brakes = save_data["upgrade_brakes"]

@@ -1,16 +1,14 @@
 extends Node
 class_name SoundSynth
 
-# Procedural Audio Synth for Engine, Horn, and Drifts (No asset files needed!)
+# Procedural & Dynamic Audio Synth featuring custom WAV engine loop!
 var engine_player: AudioStreamPlayer = null
 var horn_player: AudioStreamPlayer = null
 var skid_player: AudioStreamPlayer = null
 
-var generator_engine: AudioStreamGenerator = null
 var generator_horn: AudioStreamGenerator = null
 var generator_skid: AudioStreamGenerator = null
 
-var playback_engine: AudioStreamGeneratorPlayback = null
 var playback_horn: AudioStreamGeneratorPlayback = null
 var playback_skid: AudioStreamGeneratorPlayback = null
 
@@ -18,23 +16,26 @@ var engine_pitch_factor: float = 1.0
 var is_horn_active: bool = false
 var is_skid_active: bool = false
 
-var phase_engine: float = 0.0
 var phase_horn: float = 0.0
 var phase_skid: float = 0.0
 
 func _ready():
-	# 1. Setup Engine Sound Player
+	# 1. Setup Engine Sound Player (Loads custom WAV loop!)
 	engine_player = AudioStreamPlayer.new()
 	add_child(engine_player)
-	generator_engine = AudioStreamGenerator.new()
-	generator_engine.mix_rate = 22050
-	generator_engine.buffer_length = 0.1
-	engine_player.stream = generator_engine
-	engine_player.volume_db = -10.0
-	engine_player.play()
-	playback_engine = engine_player.get_stream_playback()
 	
-	# 2. Setup Horn Player
+	var wav_stream = load("res://smooth_01.wav")
+	if wav_stream is AudioStreamWAV:
+		# Enable continuous looping in Godot 4
+		wav_stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		engine_player.stream = wav_stream
+		engine_player.volume_db = -15.0
+		engine_player.play()
+		print("Custom smooth_01.wav loaded and looping as engine audio stream.")
+	else:
+		print("Warning: res://smooth_01.wav is not a valid AudioStreamWAV.")
+
+	# 2. Setup Horn Player (Procedural Synth)
 	horn_player = AudioStreamPlayer.new()
 	add_child(horn_player)
 	generator_horn = AudioStreamGenerator.new()
@@ -45,7 +46,7 @@ func _ready():
 	horn_player.play()
 	playback_horn = horn_player.get_stream_playback()
 	
-	# 3. Setup Brake Skid Player
+	# 3. Setup Brake Skid Player (Procedural Synth)
 	skid_player = AudioStreamPlayer.new()
 	add_child(skid_player)
 	generator_skid = AudioStreamGenerator.new()
@@ -57,24 +58,17 @@ func _ready():
 	playback_skid = skid_player.get_stream_playback()
 
 func _process(delta):
-	# Synthesize Engine audio wave (Low frequency rumble that pitch-scales with speed)
-	if playback_engine:
-		var frames_available = playback_engine.get_frames_available()
-		var target_freq = 60.0 + (engine_pitch_factor * 120.0) # mapping speed to frequency
-		var increment = target_freq / 22050.0
-		
-		for i in range(frames_available):
-			var sample = sin(phase_engine * 2.0 * PI) * 0.5 # Sine wave
-			# Add square wave harmonic for engine rumble texture
-			sample += (1.0 if sin(phase_engine * 2.0 * PI * 2.0) > 0.0 else -1.0) * 0.15
-			playback_engine.push_frame(Vector2(sample, sample))
-			phase_engine = fmod(phase_engine + increment, 1.0)
+	# Update Engine Pitch & Volume Dynamically based on current speed/engine_pitch_factor
+	if engine_player and engine_player.playing:
+		# Speed ranges map pitch scale from 0.6x (idle) to 2.8x (top speed!)
+		engine_player.pitch_scale = clamp(0.5 + (engine_pitch_factor * 0.75), 0.5, 3.0)
+		# Increase volume slightly at high speeds for realistic throttle rumble
+		engine_player.volume_db = clamp(-18.0 + (engine_pitch_factor * 4.0), -20.0, 0.0)
 			
 	# Synthesize Horn audio wave (High frequency dual-tone beep)
 	if playback_horn:
 		var frames_available = playback_horn.get_frames_available()
 		var increment1 = 440.0 / 22050.0
-		var increment2 = 445.0 / 22050.0 # dual tone harmonic
 		
 		for i in range(frames_available):
 			var sample = 0.0
@@ -91,7 +85,6 @@ func _process(delta):
 		for i in range(frames_available):
 			var sample = 0.0
 			if is_skid_active:
-				# Add white noise to friction squeal for realism
 				sample = (sin(phase_skid * 2.0 * PI) + randf_range(-1.0, 1.0) * 0.4) * 0.15
 			playback_skid.push_frame(Vector2(sample, sample))
 			phase_skid = fmod(phase_skid + increment, 1.0)

@@ -31,16 +31,10 @@ func toggle_camera_mode():
 			target_height = 2.2
 			print("Camera mode: Normal")
 		CameraMode.HOOD:
-			target_distance = 1.5
-			target_height = 1.0
-			print("Camera mode: Hood")
+			print("Camera mode: Hood (Rigid Lock)")
 		CameraMode.FIRSTPERSON:
-			# Placed inside the cockpit
-			target_distance = 0.2
-			target_height = 0.95
-			print("Camera mode: First-Person")
+			print("Camera mode: First-Person Cockpit (Rigid Lock)")
 		CameraMode.CINEMATIC:
-			# Slowly orbits the car
 			target_distance = 8.0
 			target_height = 2.8
 			print("Camera mode: Cinematic")
@@ -59,6 +53,25 @@ func _physics_process(delta):
 		
 	var delta_v = global_transform.origin - follow_this.global_transform.origin
 	var target_pos = global_transform.origin
+
+	if current_mode == CameraMode.FIRSTPERSON:
+		# 100% Rigid lock inside cockpit (Left drive, looking forward +Z)
+		var driver_offset = (follow_this.global_transform.basis.z * -0.2) + (follow_this.global_transform.basis.x * -0.3) + Vector3(0, 0.45, 0)
+		global_transform.origin = follow_this.global_transform.origin + driver_offset
+		
+		# Look directly forward towards +Z relative to the car basis
+		var target_look = follow_this.global_transform.origin + (follow_this.global_transform.basis.z * 10.0)
+		look_at(target_look, Vector3.UP)
+		return
+		
+	elif current_mode == CameraMode.HOOD:
+		# 100% Rigid lock on front hood (center, looking forward +Z)
+		var hood_offset = (follow_this.global_transform.basis.z * 1.5) + Vector3(0, 0.35, 0)
+		global_transform.origin = follow_this.global_transform.origin + hood_offset
+		
+		var target_look = follow_this.global_transform.origin + (follow_this.global_transform.basis.z * 10.0)
+		look_at(target_look, Vector3.UP)
+		return
 
 	if current_mode == CameraMode.CINEMATIC:
 		# Calculate orbit position around the car basis
@@ -80,10 +93,4 @@ func _physics_process(delta):
 	last_lookat = last_lookat.lerp(follow_this.global_transform.origin, delta * speed)
 	
 	var lookat_target = last_lookat + Vector3(0, 0.5, 0)
-	
-	if current_mode == CameraMode.HOOD or current_mode == CameraMode.FIRSTPERSON:
-		# Look directly forward relative to the car's basis
-		var target_look = follow_this.global_transform.origin + (-follow_this.global_transform.basis.z * 10.0)
-		look_at(target_look, Vector3.UP)
-	else:
-		look_at(lookat_target, Vector3.UP)
+	look_at(lookat_target, Vector3.UP)

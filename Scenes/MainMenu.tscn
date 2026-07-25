@@ -463,6 +463,13 @@ theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 theme_override_font_sizes/font_size = 20
 text = "GOLD 🟡"
 
+[node name="Default" type="Button" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors"]
+custom_minimum_size = Vector2(110, 65)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.5, 0.1, 1)
+theme_override_font_sizes/font_size = 20
+text = "DEFAULT 🟠"
+
 [node name="UnderglowBox" type="VBoxContainer" parent="MainLayout/ContentArea/GaragePanel/CustomizationContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -876,6 +883,7 @@ text = "CLAIM 200 COINS 🎁"
 [connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Blue" to="." method="_on_paint_car" binds= ["blue"]]
 [connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Green" to="." method="_on_paint_car" binds= ["green"]]
 [connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Gold" to="." method="_on_paint_car" binds= ["gold"]]
+[connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/PaintBox/PaintColors/Default" to="." method="_on_paint_car" binds= ["default"]]
 [connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors/Cyan" to="." method="_on_underglow_color_pressed" binds= ["cyan"]]
 [connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors/Pink" to="." method="_on_underglow_color_pressed" binds= ["pink"]]
 [connection signal="pressed" from="MainLayout/ContentArea/GaragePanel/CustomizationContainer/UnderglowBox/GlowColors/Gold" to="." method="_on_underglow_color_pressed" binds= ["gold"]]
